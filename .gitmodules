@@ -1,6 +1,6 @@
-[submodule "R6++/deps/rapidjson"]
-	path = R6++/deps/rapidjson
+[submodule "R6pp/dep/rapidjson"]
+	path = R6pp/dep/rapidjson
 	url = https://github.com/Tencent/rapidjson.git
-[submodule "R6++/deps/cpr"]
-	path = R6++/deps/cpr
+[submodule "R6pp/dep/cpr"]
+	path = R6pp/dep/cpr
 	url = https://github.com/whoshuu/cpr.git

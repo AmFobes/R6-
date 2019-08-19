@@ -28,12 +28,12 @@ endif()
 if(NOT DEFINED BUILD_CPR_TESTS)
 set(BUILD_CPR_TESTS OFF)
 endif()
-add_subdirectory("deps/cpr")
+add_subdirectory("dep/cpr")
 
 if(NOT DEFINED RAPIDJSON_BUILD_TESTS)
 set(RAPIDJSON_BUILD_TESTS OFF)
 endif()
-add_subdirectory("deps/rapidjson")
+add_subdirectory("dep/rapidjson")
 
 add_library(R6pp R6pp.cpp R6pp.h)
 
