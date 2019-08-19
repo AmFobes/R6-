@@ -14,22 +14,32 @@ cmake_minimum_required (VERSION 3.0)
 add_definitions(-D_SILENCE_TR1_NAMESPACE_DEPRECATION_WARNING)
 add_definitions(-DCURL_STATICLIB )
 
-if(WIN32)
+if(WIN32 AND NOT DEFINED CMAKE_USE_OPENSSL)
+message(STATUS "Using WINSSL for CURL")
 set(CMAKE_USE_WINSSL true)
 set(CMAKE_USE_OPENSSL false)
 endif()
 
+if(NOT DEFINED USE_SYSTEM_CURL AND UNIX)
+message(STATUS "Using system CURL for UNIX")
+set(USE_SYSTEM_CURL ON)
+endif()
+
+if(NOT DEFINED BUILD_CPR_TESTS)
 set(BUILD_CPR_TESTS OFF)
+endif()
 add_subdirectory("deps/cpr")
+
+if(NOT DEFINED RAPIDJSON_BUILD_TESTS)
 set(RAPIDJSON_BUILD_TESTS OFF)
+endif()
 add_subdirectory("deps/rapidjson")
 
 add_library(R6pp R6pp.cpp R6pp.h)
 
 target_link_libraries(R6pp ${CPR_LIBRARIES})
 
-if(WIN32)
-target_link_libraries(R6pp ${OPENSSL_LIBRARIES})
-endif()
+
+
 
 
