@@ -7,9 +7,8 @@
 #include <string>
 #include <iostream>
 #include "Types.h"
-#include "cpr/cpr.h"
-#include "rapidjson/document.h"
-
+#include "deps/cpr/include/cpr/cpr.h"
+#include "deps/rapidjson/include/rapidjson/document.h"
 
 namespace R6pp{
 	

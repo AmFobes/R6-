@@ -24,9 +24,6 @@ add_subdirectory("deps/cpr")
 set(RAPIDJSON_BUILD_TESTS OFF)
 add_subdirectory("deps/rapidjson")
 
-include_directories(${CPR_INCLUDE_DIRS})
-include_directories("deps/rapidjson/include")
-
 add_library(R6pp R6pp.cpp R6pp.h)
 
 target_link_libraries(R6pp ${CPR_LIBRARIES})
