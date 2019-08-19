@@ -83,7 +83,7 @@ namespace R6pp {
 		Xbox,
 	};
 
-	std::string PlatformTypeToString(PlatformType type) {
+	inline std::string PlatformTypeToString(PlatformType type) {
 		switch (type) {
 		case PlatformType::Uplay:
 			return "uplay";
@@ -94,7 +94,7 @@ namespace R6pp {
 		}
 	}
 
-	PlatformType StringToPlatformType(std::string type) {
+	inline PlatformType StringToPlatformType(std::string type) {
 		std::transform(type.begin(), type.end(), type.begin(),
 			[](unsigned char c) { return std::tolower(c); });
 		if (type == "uplay")
@@ -173,17 +173,22 @@ namespace R6pp {
 	struct BaseWeapon {
 		int number;
 		std::string name;
-		BaseWeapon(int number, std::string name) {
+		inline BaseWeapon(int number, std::string name) {
 			this->number = number;
 			this->name = name;
 		}
-		BaseWeapon() {};
-	}AR(1, "Assault Rifle"), MR(2, "Marksman Rifle"),
-		SMG(3, "Submachine Gun"), Handgun(4, "Handgun"),
-		Shotgun(5, "Shotgun"), LMG(6, "Light Machine Gun"),
+		inline BaseWeapon() {};
+	};
+	static BaseWeapon
+		AR(1, "Assault Rifle"),
+		MR(2, "Marksman Rifle"),
+		SMG(3, "Submachine Gun"),
+		Handgun(4, "Handgun"),
+		Shotgun(5, "Shotgun"),
+		LMG(6, "Light Machine Gun"),
 		MachinePistol(7, "Machine Pistol");
 
-	std::vector<BaseWeapon> Weapons{
+	static std::vector<BaseWeapon> Weapons{
 		AR,MR,SMG,
 		Handgun,Shotgun,
 		LMG,MachinePistol,
@@ -205,7 +210,7 @@ namespace R6pp {
 		Asia,
 	};
 
-	std::string RegionToString(Region region) {
+	inline std::string RegionToString(Region region) {
 		if (region == Region::America)
 			return "ncsa";
 		if (region == Region::Europe)
@@ -214,7 +219,7 @@ namespace R6pp {
 			return "apac";
 	}
 
-	Region StringToRegion(std::string region) {
+	inline Region StringToRegion(std::string region) {
 		std::transform(region.begin(), region.end(), region.begin(),
 			[](unsigned char c) { return std::tolower(c); });
 		if (region == "ncsa")
@@ -228,18 +233,20 @@ namespace R6pp {
 	struct BaseSeason {
 		int SeasonID;
 		std::string SeasonName;
-		BaseSeason(int SeasonID, std::string SeasonName) {
+		inline BaseSeason(int SeasonID, std::string SeasonName) {
 			this->SeasonID = SeasonID;
 			this->SeasonName = SeasonName;
 		}
-		BaseSeason() {}
-	}Current(-1,""),PhantomSight(14,"Phantom Sight"),BurntHorizon(13,"Burnt Horizon"),
-		WindBastion(12,"Wind Bastion"),GrimSky(11,"Grim Sky"),ParaBellum(10,"Para Bellum"),
-		Chimera(9,"Chimera"),WhiteNoise(8,"White Noise"),BloodOrchid(7,"Blood Orchid"),
-		Health(6,"Health"),VelvetShell(5,"Velvet Shell"),RedCrow(4,"Red Crow"),
-			SkullRain(3,"Skull Rain"), DustLine(2,"Dust Line"),BlackIce(1,"Black Ice");
+		inline BaseSeason() {}
+	};
+	static BaseSeason
+		Current(-1, ""), PhantomSight(14, "Phantom Sight"), BurntHorizon(13, "Burnt Horizon"),
+		WindBastion(12, "Wind Bastion"), GrimSky(11, "Grim Sky"), ParaBellum(10, "Para Bellum"),
+		Chimera(9, "Chimera"), WhiteNoise(8, "White Noise"), BloodOrchid(7, "Blood Orchid"),
+		Health(6, "Health"), VelvetShell(5, "Velvet Shell"), RedCrow(4, "Red Crow"),
+		SkullRain(3, "Skull Rain"), DustLine(2, "Dust Line"), BlackIce(1, "Black Ice");
 
-	std::vector<BaseSeason> Seasons{
+	static std::vector<BaseSeason> Seasons{
 		Current,PhantomSight,BurntHorizon,
 		WindBastion,GrimSky,ParaBellum,
 		Chimera,WhiteNoise,BloodOrchid,
@@ -273,7 +280,7 @@ namespace R6pp {
 		std::string update_time;
 		int wins;
 	};
-	
+
 	struct UserGametypeStat {
 		struct baseCasual {
 			int death;
@@ -315,10 +322,10 @@ namespace R6pp {
 			int matchlost;
 			int matchplayed;
 			int matchwon;
-		}PlantBomb,RescueHostage,SecureArea;
+		}PlantBomb, RescueHostage, SecureArea;
 	};
 
-	struct PlayerProfile{
+	struct PlayerProfile {
 		int level;
 		int lootbox_probability;
 		std::string profile_id;
