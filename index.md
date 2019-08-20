@@ -14,15 +14,6 @@ R6pp is built using [RapidJSON](https://github.com/Tencent/rapidjson) and [CPR](
 When developing the project I tried to make installation of the dependencies as easy as possible, of course some platforms are not accounted for (Apple for example) so if you encounter any problems just create a [Pull Request](https://github.com/AmFobes/R6pp/compare) if you have a solution or an [Issue](https://github.com/AmFobes/R6pp/issues/new).
 
 If you need any specific build flags / definitions the only ones R6pp modify are 
-- _SILENCE_TR1_NAMESPACE_DEPRECATION_WARNING
-- CMAKE_USE_WINSSL (If on windows)
-- CMAKE_USE_OPENSSL (If on windows)
-- USE_SYSTEM_CURL (If on Linux)
-- BUILD_CURL_EXE
-- CURL_STATICLIB
-- BUILD_CPR_TESTS
-- RAPIDJSON_BUILD_EXAMPLES
-- RAPIDJSON_BUILD_TESTS
 
 | Flag / Definition                         | Value | Platform | Comment                                 |
 |:------------------------------------------|:------|:---------|:----------------------------------------|
@@ -52,7 +43,7 @@ Git clone **Make sure you add the --recursive, you need the thirdparty submodule
 $ git clone https://github.com/AmFobes/R6pp.git --recursive
 ```
 Go back to your main project directory and edit your CMakeLists.txt so it looks something like this
-```CMake
+```cmake
 cmake_minimum_required (VERSION 3.4)
 
 project(MyProject)
