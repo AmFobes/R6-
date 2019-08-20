@@ -95,8 +95,8 @@ Select either **Debug** or **Release** (Default is Debug)
 
 ![](images/BuildWindowsVSBuildTypes.jpg)
 
-Look at the top, left justified menu with |File|Edit|View| etc
-Under |Build| click **Build Solution**
+Look at the top, left justified menu with \|File\|Edit\|View\| etc
+Under \|Build\| click **Build Solution**
 
 ![](images/BuildWindowsVS.jpg)
 
