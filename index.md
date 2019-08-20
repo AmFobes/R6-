@@ -94,6 +94,7 @@ Once you ran cmake, a .sln (R6pp.sln) file should've been created, open the solu
 Select either **Debug** or **Release** (Default is Debug)
 
 ![](images/BuildWindowsVSBuildTypes.jpg)
+
 Look at the top, left justified menu with |File|Edit|View| etc
 Under |Build| click **Build Solution**
 
