@@ -23,18 +23,18 @@ If you need any specific build flags / definitions the only ones R6pp modify are
 - BUILD_CPR_TESTS
 - RAPIDJSON_BUILD_EXAMPLES
 - RAPIDJSON_BUILD_TESTS
-| Flag / Definition    | Value | Platform | Comment                                 |
-|:---------------------     -----|:------|:---------|:----------------------------------------|
-| _SILENCE_TR1_NAMESPACE_DE |       | ALL      | See CMakeLists.txt or gtest [Issue](https://github.com/google/googletest/issues/1111)       |
-  PRECATION_WARNING                     
-| CMAKE_USE_WINSSL          | `ON`  | Windows  | CPR on windows doesn't work with OPENSSL                                            
-| CMAKE_USE_OPENSSL         | `OFF` | Windows  | Disable OPENSSL use WINSSL              |
-| USE_SYSTEM_CURL           | `ON`  | Linux    | Running apt is easier than building     |
-| BUILD_CURL_EXE            | `OFF` | ALL      | CURL executable isn't used              |
-| CURL_STATICLIB            | `ON`  | ALL      | Statically link cpr to CURL             | 
-| BUILD_CPR_TESTS           | `OFF` | ALL      | Issues when running tests on windows    |
-| RAPIDJSON_BUILD_EXAMPLES  | `OFF` | ALL      | Possible issues when building examples? |
-| RAPIDJSON_BUILD_TESTS     | `OFF` | ALL      | Issues when running tests on windows    |
+
+| Flag / Definition                         | Value | Platform | Comment                                 |
+|:------------------------------------------|:------|:---------|:----------------------------------------|
+| _SILENCE_TR1_NAMESPACE_DEPRECATION_WARNING|       | ALL      | See CMakeLists.txt or gtest [Issue](https://github.com/google/googletest/issues/1111)                     
+| CMAKE_USE_WINSSL                          | `ON`  | Windows  | CPR on windows doesn't work with OPENSSL                                            
+| CMAKE_USE_OPENSSL                         | `OFF` | Windows  | Disable OPENSSL use WINSSL              |
+| USE_SYSTEM_CURL                           | `ON`  | Linux    | Running apt is easier than building     |
+| BUILD_CURL_EXE                            | `OFF` | ALL      | CURL executable isn't used              |
+| CURL_STATICLIB                            | `ON`  | ALL      | Statically link cpr to CURL             | 
+| BUILD_CPR_TESTS                           | `OFF` | ALL      | Issues when running tests on windows    |
+| RAPIDJSON_BUILD_EXAMPLES                  | `OFF` | ALL      | Possible issues when building examples? |
+| RAPIDJSON_BUILD_TESTS                     | `OFF` | ALL      | Issues when running tests on windows    |
 
 ## CMake Submodule (Cross-Platform)
 
