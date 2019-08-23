@@ -1,10 +1,19 @@
 dist: trusty
 sudo: require
 
+branches:
+  only:
+  - master
+
 language: cpp
 compiler: 
     - g++
     - clang++
+
+os:
+    - windows
+    - osx
+    - linux
     
 addons:
   apt:
@@ -23,4 +32,7 @@ before_script:
     - cmake ..
       
 script:
-    - make
+    - if [ "$TRAVIS_OS_NAME" = "windows" ]; then MSBuild /nologo /t:ProjectName:Build R6pp.sln; fi
+    - if [ "$TRAVIS_OS_NAME" = "linux" ]; then make; fi
+    - if [ "$TRAVIS_OS_NAME" = "osx" ]; then make; fi
+    
