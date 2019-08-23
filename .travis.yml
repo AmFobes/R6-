@@ -19,6 +19,7 @@ addons:
 before_script:
     - cd R6pp
     - mkdir build
+    - cd build
     - cmake ..
       
 script:
