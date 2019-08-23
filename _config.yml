@@ -1,5 +1,13 @@
 remote_theme: pmarsceill/just-the-docs
-search_enabled: false
+search_enabled: true
 color_scheme: "dark"
 
+aux_links:
+  "R6pp Github":
+    - "https://github.com/AmFobes/R6pp"
+  "CPR Github":
+    - "https://github.com/whoshuu/cpr"
+  "RapidJSON Github":
+    - "https://github.com/Tencent/rapidjson"
+    
 footer_content: "Made by Ty L (Fobes/AmFobes) 2019"

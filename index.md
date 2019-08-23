@@ -1,9 +1,9 @@
 ---
-layout: default
 title: Home
+layout: default
 nav_order: 1
-description: "R6pp is an easy C++ interface for rainbow six siege"
-permalink: /
+description: R6pp is an easy C++ interface for rainbow six siege
+permalink: "/"
 ---
 
 These docs are made to be easily understood by someone with decent computer knowledge, one thing I hate as a highschool student is something with confusing documentation.
@@ -104,10 +104,3 @@ After waiting a little bit the library file you need will be located at
     `R6pp/R6pp/Debug/R6pp-d.lib`
 or
     `R6pp/R6pp/Release/R6pp.lib`
-
-
-
-
-
-
-
