@@ -1,7 +1,7 @@
 dist: trusty
 sudo: require
 
-lnaguage: cpp
+language: cpp
 compiler: 
     - g++
     - clang++
