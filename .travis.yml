@@ -1,0 +1,25 @@
+dist: trusty
+sudo: require
+
+lnaguage: cpp
+compiler: 
+    - g++
+    - clang++
+    
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - gcc
+      - g++
+      - cmake
+      - clang-3.3
+      
+before_script:
+    - cd R6pp
+    - mkdir build
+    - cmake ..
+      
+script:
+    - make
