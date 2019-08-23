@@ -6,25 +6,31 @@ branches:
   - master
 
 language: cpp
-compiler: 
-    - g++
-    - clang++
 
-os:
-    - windows
-    - osx
-    - linux
-    
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - gcc
-      - g++
-      - cmake
-      - clang-3.3
-      
+matrix:
+    include:
+        - os: linux
+           compiler:
+           - g++
+           - clang++
+           addons:
+            apt:
+             sources:
+             - ubuntu-toolchain-r-test
+             packages:
+             - gcc
+             - g++
+             - cmake
+             - clang-3.3
+        - os: osx
+         compiler:
+         - g++
+         - clang++
+         addons:
+          homebrew:
+           packages:
+            -openssl
+            
 before_script:
     - cd R6pp
     - mkdir build
@@ -32,7 +38,5 @@ before_script:
     - cmake ..
       
 script:
-    - if [ "$TRAVIS_OS_NAME" = "windows" ]; then MSBuild /nologo /t:ProjectName:Build R6pp.sln; fi
-    - if [ "$TRAVIS_OS_NAME" = "linux" ]; then make; fi
-    - if [ "$TRAVIS_OS_NAME" = "osx" ]; then make; fi
+    make
     
