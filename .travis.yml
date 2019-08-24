@@ -7,29 +7,27 @@ branches:
 
 language: cpp
 
-matrix:
-    include:
-        - os: linux
-           compiler:
-           - g++
-           - clang++
-           addons:
-            apt:
-             sources:
-             - ubuntu-toolchain-r-test
-             packages:
-             - gcc
-             - g++
-             - cmake
-             - clang-3.3
-        - os: osx
-         compiler:
-         - g++
-         - clang++
-         addons:
-          homebrew:
-           packages:
-            -openssl
+compiler:
+    - g++
+    - clang++
+
+os:
+    - linux
+    - osx
+
+addons: 
+    apt: 
+        sources:
+            - ubuntu-toolchain-r-test
+        packages:
+        - gcc
+        - g++
+        - cmake
+        - clang-3.3
+    homebrew:
+        packages:
+            - openssl
+        update: true
             
 before_script:
     - cd R6pp
