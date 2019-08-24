@@ -1,0 +1,14 @@
+os: Visual Studio 2017
+
+clone_script:
+- cmd: git clone -q --recursive --branch=master https://github.com/AmFobes/R6pp.git c:\projects\r6pp\
+- cmd: git checkout -qf %APPVEYOR_REPO_COMMIT%
+
+build_script:
+    - cd c:\projects\r6pp\
+    - git fetch --recurse-submodules
+    - cd R6pp
+    - mkdir build
+    - cd build
+    - cmake ..
+    - msbuild.exe R6pp.sln
