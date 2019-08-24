@@ -3,7 +3,9 @@
 #include <vector>
 #include <exception>
 #include <string>
+#include <cctype>
 #include <algorithm>
+
 /*
 
 	Exceptions

@@ -10,5 +10,5 @@ build_script:
     - cd R6pp
     - mkdir build
     - cd build
-    - cmake ..
+    - cmake -j 2 .. 
     - msbuild.exe R6pp.sln
