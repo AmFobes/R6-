@@ -24,10 +24,6 @@ addons:
         - g++
         - cmake
         - clang-3.3
-    homebrew:
-        packages:
-            - openssl
-        update: true
             
 before_script:
     - cd R6pp
