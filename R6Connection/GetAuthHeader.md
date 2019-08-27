@@ -6,20 +6,16 @@ nav_order: 3
 permalink: "/R6Connection/GetAuthHeader"
 ---
 
-### Return Type: [R6Connection](/R6Connection)
+### Return Type: [AuthenticationHeader ](/Types/AuthenticationHeader )
 
-### Arguments
-* `std::string` email
- * The ubisoft account email
-* `std::string` password
- *  The ubisoft account password
-
+### Function arguments
+ - none
+ - 
 ### Definition
 ```cpp
-R6Connection(std::string email, std::string password)
+AuthenticationHeader GetAuthHeader() {return this->_authHeader;}
 ```
 
 ### Note(s)
-WARNING
-{: .label .label-red } 
-The password is not saved into memory by R6pp, once the constructor returns the argument should be thrown away off of the [stack](https://www.tenouk.com/Bufferoverflowc/Bufferoverflow2.html).
+
+Under normal circumstances this function should not be needed, an internal instance of the authentication header is set by the [Constructor] (/R6Connection/R6Connection)

@@ -12,7 +12,7 @@ permalink: "/R6Connection"
 
 |  Function                           | Return Type            | Arguments                                                                                                      | Comment                                                    |
 |:------------------------- -|:----------------------|:---------------------------------------------------------------------- |:-----------------------------------------|
-| [Constructor](R6Connection) | R6Connection        | `String` email & `String` password                                                   | Fetches the auth header data from ubi  |
+| [Constructor](/R6Connection/R6connection) | R6Connection        | `String` email & `String` password                                                   | Fetches the auth header data from ubi  |
 | [SearchForUser](SearchForUser) | SearchedUsers      | `String` name & `PlatformType` platform                                    | Searches for a user                                |
 | [GetAuthHeader](GetAuthHeader) | AuthenticationHeader| | See the AuthenticationHeader page for info
 | [GetUserApplications](GetUserApplications) | UserApplications | `SearchedUser` user & `String[]` applications                          | See the `application` page for information|

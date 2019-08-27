@@ -19,11 +19,12 @@ When developing the project I tried to make installation of the dependencies as 
 
 If you need any specific build flags / definitions the only ones R6pp modify are 
 
-| Flag / Definition                         | Value | Platform | Comment                                 |
-|:------------------------------------------|:------|:---------|:----------------------------------------|
-| _SILENCE_TR1_NAMESPACE_DEPRECATION_WARNING|       | ALL      | See CMakeLists.txt or gtest [Issue](https://github.com/google/googletest/issues/1111)                     
-| CMAKE_USE_WINSSL                          | `ON`  | Windows  | CPR on windows doesn't work with OPENSSL|                                           
-| CMAKE_USE_OPENSSL                         | `OFF` | Windows  | Disable OPENSSL use WINSSL              |
+| Flag / Definition                   | Value | Platform | Comment                                 |
+|:------------------------------|:------|:---------|:----------------------------------------|
+| _SILENCE_TR1_NAMESPACE\_ DEPRECATION_WARNING|   | ALL      | See CMakeLists.txt or gtest [Issue](https://github.com/google/googletest/issues/1111)                     
+| CMAKE_USE_WINSSL                          | `ON`  | Windows  | Use WINSSL for Windows|                                           
+| CMAKE_USE_OPENSSL                         | `ON` | Linux  | Use OPENSSL for Linux       |
+| CMAKE_USE_DARWINSSL             | `ON` | Mac | Use DARWINSSL for mac/osx |
 | USE_SYSTEM_CURL                           | `ON`  | Linux    | Running apt is easier than building     |
 | BUILD_CURL_EXE                            | `OFF` | ALL      | CURL executable isn't used              |
 | CURL_STATICLIB                            | `ON`  | ALL      | Statically link cpr to CURL             | 
