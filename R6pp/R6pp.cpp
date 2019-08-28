@@ -77,7 +77,7 @@ R6pp::SearchedUsers R6pp::R6Connection::SearchForUser(std::string name,R6pp::Pla
 	return su;
 }
 
-R6pp::UserApplications R6pp::R6Connection::GetUserApplicationsByID(std::string profileID,  std::vector<std::string>& applications) {
+R6pp::UserApplications R6pp::R6Connection::GetUserApplicationsByID(std::string profileID,  std::vector<std::string> applications) {
 	if (applications.size() == 0)
 		// Default
 		applications = {
@@ -123,14 +123,14 @@ R6pp::UserApplications R6pp::R6Connection::GetUserApplicationsByID(std::string p
 }
 
 
-R6pp::UserApplications R6pp::R6Connection::GetUserApplications(R6pp::SearchedUser user, std::vector<std::string> &applications) {
+R6pp::UserApplications R6pp::R6Connection::GetUserApplications(R6pp::SearchedUser user, std::vector<std::string> applications) {
 	if (user.profileId.empty())
 		throw Exceptions::InputArgumentsInvalid("Missing user profileID");
 
 		return this->GetUserApplicationsByID(user.profileId);
 }
 
-R6pp::UserApplications R6pp::R6Connection::GetUserApplications(std::string username,R6pp::PlatformType platform, std::vector<std::string>& applications) {
+R6pp::UserApplications R6pp::R6Connection::GetUserApplications(std::string username,R6pp::PlatformType platform, std::vector<std::string> applications) {
 	if (username.empty())
 		throw Exceptions::InputArgumentsInvalid("Missing username");
 
