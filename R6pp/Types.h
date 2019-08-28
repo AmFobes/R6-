@@ -16,12 +16,8 @@ namespace Exceptions {
 	public:
 		std::string ermsg;
 
-		InputArgumentsInvalid(std::string msg) : runtime_error(msg) {
-			this->ermsg = msg;
-		};
-		InputArgumentsInvalid() : runtime_error("Input arguments that were expected were not present") {
-			this->ermsg = "Input arguments that were expected were not present";
-		}
+		InputArgumentsInvalid(const std::string& msg) : runtime_error(msg), ermsg(msg) { };
+		InputArgumentsInvalid() : runtime_error("Input arguments that were expected were not present"), ermsg("Input arguments that were expected were not present") {}
 		const char* what() throw() {
 			return ermsg.c_str();
 		}
@@ -31,12 +27,8 @@ namespace Exceptions {
 	public:
 		std::string ermsg;
 
-		FatalConnectionError(std::string msg) : runtime_error(msg) {
-			this->ermsg = msg;
-		};
-		FatalConnectionError(int code) : runtime_error("Error: " + std::to_string(code)) {
-			this->ermsg = "Error: " + std::to_string(code);
-		};
+		FatalConnectionError(const std::string &msg) : runtime_error(msg), ermsg(msg) { };
+		FatalConnectionError(int code) : runtime_error("Error: " + std::to_string(code)), ermsg("Error: " + std::to_string(code)) {	};
 		const char* what() throw() {
 			return ermsg.c_str();
 		}
@@ -47,9 +39,7 @@ namespace Exceptions {
 	public:
 		std::string ermsg;
 
-		JsonParseError(std::string msg) : runtime_error(msg) {
-			this->ermsg = msg;
-		};
+		JsonParseError(const std::string &msg) : runtime_error(msg), ermsg(msg) { };
 
 		const char* what() throw() {
 			return ermsg.c_str();
@@ -175,7 +165,7 @@ namespace R6pp {
 	struct BaseWeapon {
 		int number;
 		std::string name;
-		inline BaseWeapon(int number, std::string name) {
+		inline BaseWeapon(int number, const std::string &name) {
 			this->number = number;
 			this->name = name;
 		}

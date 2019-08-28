@@ -77,7 +77,7 @@ R6pp::SearchedUsers R6pp::R6Connection::SearchForUser(std::string name,R6pp::Pla
 	return su;
 }
 
-R6pp::UserApplications R6pp::R6Connection::GetUserApplicationsByID(std::string profileID, std::vector<std::string> applications) {
+R6pp::UserApplications R6pp::R6Connection::GetUserApplicationsByID(std::string profileID,  std::vector<std::string>& applications) {
 	if (applications.size() == 0)
 		// Default
 		applications = {
@@ -90,7 +90,6 @@ R6pp::UserApplications R6pp::R6Connection::GetUserApplicationsByID(std::string p
 		throw Exceptions::InputArgumentsInvalid("Missing user profileID");
 
 	std::stringstream applicationIds;
-	char delim = ',';
 	std::copy(applications.begin(), applications.end(), std::ostream_iterator<std::string>(applicationIds, ","));
 
 	auto resp =
@@ -124,14 +123,14 @@ R6pp::UserApplications R6pp::R6Connection::GetUserApplicationsByID(std::string p
 }
 
 
-R6pp::UserApplications R6pp::R6Connection::GetUserApplications(R6pp::SearchedUser user, std::vector<std::string> applications) {
+R6pp::UserApplications R6pp::R6Connection::GetUserApplications(R6pp::SearchedUser user, std::vector<std::string> &applications) {
 	if (user.profileId.empty())
 		throw Exceptions::InputArgumentsInvalid("Missing user profileID");
 
 		return this->GetUserApplicationsByID(user.profileId);
 }
 
-R6pp::UserApplications R6pp::R6Connection::GetUserApplications(std::string username,R6pp::PlatformType platform, std::vector<std::string> applications) {
+R6pp::UserApplications R6pp::R6Connection::GetUserApplications(std::string username,R6pp::PlatformType platform, std::vector<std::string>& applications) {
 	if (username.empty())
 		throw Exceptions::InputArgumentsInvalid("Missing username");
 
@@ -526,12 +525,12 @@ R6pp::UserWeaponStat R6pp::R6Connection::GetUserWeaponStat(SearchedUser user, Ba
 	return this->GetUserWeaponStatByID(user.profileId, userWeapon);
 }
 
-R6pp::UserWeaponStat R6pp::R6Connection::GetUserWeaponStat(std::string profileID, BaseWeapon userWeapon, R6pp::PlatformType platformType) {
-	if (profileID.empty())
+R6pp::UserWeaponStat R6pp::R6Connection::GetUserWeaponStat(std::string username, BaseWeapon userWeapon, R6pp::PlatformType platformType) {
+	if (username.empty())
 		throw Exceptions::InputArgumentsInvalid("Missing profileID");
 
-	auto user = this->SearchForUser(profileID, platformType);
-	return this->GetUserWeaponStatByID(profileID, userWeapon);
+	auto user = this->SearchForUser(username, platformType)[0];
+	return this->GetUserWeaponStatByID(user.profileId, userWeapon);
 }
 
 R6pp::UserSeasonStat R6pp::R6Connection::GetUserSeasonStatByID(std::string profileID, BaseSeason Season, Region region) {

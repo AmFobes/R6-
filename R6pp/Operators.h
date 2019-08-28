@@ -15,18 +15,9 @@ namespace R6pp {
 			std::string secondNum;
 			std::string name; // Possibly unused
 			std::string unique;
-			inline BaseOperator(std::string first, std::string second, std::string name, std::string unique) {
-				this->firstNum = first;
-				this->secondNum = second;
-				this->name = name;
-				this->unique = unique;
-			}
+			inline BaseOperator(const std::string &first, const std::string &second, const std::string &name, const std::string &unique) : firstNum(first), secondNum(second), name(name), unique(unique) { }
 			inline BaseOperator() {};
-			inline BaseOperator(std::string first, std::string second, std::string unique) {
-				this->firstNum = first;
-				this->secondNum = second;
-				this->unique = unique;
-			}
+			inline BaseOperator(const std::string &first, const std::string &second, const std::string &unique) : firstNum(first), secondNum(second),unique(unique){ }
 		};
 
 		static	BaseOperator  SAS("1", "1", "SAS RECRUIT", "");
