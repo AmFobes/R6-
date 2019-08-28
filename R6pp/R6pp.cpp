@@ -123,7 +123,7 @@ R6pp::UserApplications R6pp::R6Connection::GetUserApplicationsByID(std::string p
 }
 
 
-R6pp::UserApplications R6pp::R6Connection::GetUserApplications(R6pp::SearchedUser user, std::vector<std::string> applications) {
+R6pp::UserApplications R6pp::R6Connection::GetUserApplications(const R6pp::SearchedUser &user, std::vector<std::string> applications) {
 	if (user.profileId.empty())
 		throw Exceptions::InputArgumentsInvalid("Missing user profileID");
 
@@ -197,7 +197,7 @@ R6pp::UserActions R6pp::R6Connection::GetUserActionsByID(std::string profileID) 
 	return ua;
 
 }
-R6pp::UserActions R6pp::R6Connection::GetUserActions(SearchedUser user) {
+R6pp::UserActions R6pp::R6Connection::GetUserActions(const SearchedUser &user) {
 	if (user.profileId.empty())
 		throw Exceptions::InputArgumentsInvalid("Missing user profileID");
 
@@ -299,14 +299,14 @@ R6pp::UserOperatorStats R6pp::R6Connection::GetUserOperatorStats(std::string use
 	return this->GetUserOperatorStatsByID(user.profileId);
 }
 
-R6pp::UserOperatorStats  R6pp::R6Connection::GetUserOperatorStats(SearchedUser user) {
+R6pp::UserOperatorStats  R6pp::R6Connection::GetUserOperatorStats(const SearchedUser &user) {
 	if (user.profileId.empty())
 		throw Exceptions::InputArgumentsInvalid("Missing profileID");
 
 	return this->GetUserOperatorStatsByID(user.profileId);
 }
 
-R6pp::UserOperatorStat R6pp::R6Connection::GetUserOperatorStatByID(std::string profileID, R6pp::Operators::BaseOperator userOperator) {
+R6pp::UserOperatorStat R6pp::R6Connection::GetUserOperatorStatByID(std::string profileID, const R6pp::Operators::BaseOperator &userOperator) {
 	if (profileID.empty())
 		throw Exceptions::InputArgumentsInvalid("Missing user profileID");
 	
@@ -375,14 +375,14 @@ R6pp::UserOperatorStat R6pp::R6Connection::GetUserOperatorStatByID(std::string p
 		return uoStat;
 }
 
-R6pp::UserOperatorStat R6pp::R6Connection::GetUserOperatorStat(R6pp::SearchedUser user, R6pp::Operators::BaseOperator userOperator) {
+R6pp::UserOperatorStat R6pp::R6Connection::GetUserOperatorStat(const R6pp::SearchedUser &user, const R6pp::Operators::BaseOperator &userOperator) {
 	if (user.profileId.empty())
 		throw Exceptions::InputArgumentsInvalid("Missing profileID");
 
 	return this->GetUserOperatorStatByID(user.profileId, userOperator);
 }
 
-R6pp::UserOperatorStat R6pp::R6Connection::GetUserOperatorStat(std::string username, R6pp::Operators::BaseOperator userOperator, R6pp::PlatformType platformType) {
+R6pp::UserOperatorStat R6pp::R6Connection::GetUserOperatorStat(std::string username, const R6pp::Operators::BaseOperator &userOperator, R6pp::PlatformType platformType) {
 	if (username.empty())
 		throw Exceptions::InputArgumentsInvalid("Missing profileID");
 
@@ -447,7 +447,7 @@ R6pp::UserWeaponStats R6pp::R6Connection::GetUserWeaponStatsByID(std::string pro
 	return uws;
 }
 
-R6pp::UserWeaponStats R6pp::R6Connection::GetUserWeaponStats(SearchedUser user) {
+R6pp::UserWeaponStats R6pp::R6Connection::GetUserWeaponStats(const SearchedUser &user) {
 	if (user.profileId.empty())
 		throw Exceptions::InputArgumentsInvalid("Missing profileID");
 
@@ -462,7 +462,7 @@ R6pp::UserWeaponStats R6pp::R6Connection::GetUserWeaponStats(std::string usernam
 	return this->GetUserWeaponStatsByID(user.profileId);
 }
 
-R6pp::UserWeaponStat R6pp::R6Connection::GetUserWeaponStatByID(std::string profileID, BaseWeapon userWeapon) {
+R6pp::UserWeaponStat R6pp::R6Connection::GetUserWeaponStatByID(std::string profileID, const BaseWeapon &userWeapon) {
 		if (profileID.empty())
 			throw Exceptions::InputArgumentsInvalid("Missing profileID");
 
@@ -518,14 +518,14 @@ R6pp::UserWeaponStat R6pp::R6Connection::GetUserWeaponStatByID(std::string profi
 		return uwstat;
 }
 
-R6pp::UserWeaponStat R6pp::R6Connection::GetUserWeaponStat(SearchedUser user, BaseWeapon userWeapon) {
+R6pp::UserWeaponStat R6pp::R6Connection::GetUserWeaponStat(const SearchedUser &user, const BaseWeapon &userWeapon) {
 	if (user.profileId.empty())
 		throw Exceptions::InputArgumentsInvalid("Missing profileID");
 
 	return this->GetUserWeaponStatByID(user.profileId, userWeapon);
 }
 
-R6pp::UserWeaponStat R6pp::R6Connection::GetUserWeaponStat(std::string username, BaseWeapon userWeapon, R6pp::PlatformType platformType) {
+R6pp::UserWeaponStat R6pp::R6Connection::GetUserWeaponStat(std::string username, const BaseWeapon &userWeapon, R6pp::PlatformType platformType) {
 	if (username.empty())
 		throw Exceptions::InputArgumentsInvalid("Missing profileID");
 
@@ -533,7 +533,7 @@ R6pp::UserWeaponStat R6pp::R6Connection::GetUserWeaponStat(std::string username,
 	return this->GetUserWeaponStatByID(user.profileId, userWeapon);
 }
 
-R6pp::UserSeasonStat R6pp::R6Connection::GetUserSeasonStatByID(std::string profileID, BaseSeason Season, Region region) {
+R6pp::UserSeasonStat R6pp::R6Connection::GetUserSeasonStatByID(std::string profileID, const BaseSeason &Season, const Region &region) {
 	if (profileID.empty())
 		throw Exceptions::InputArgumentsInvalid("Missing profileID");
 
@@ -585,14 +585,14 @@ R6pp::UserSeasonStat R6pp::R6Connection::GetUserSeasonStatByID(std::string profi
 	return uss;
 }
 
-R6pp::UserSeasonStat R6pp::R6Connection::GetUserSeasonStat(SearchedUser user, BaseSeason season,Region region) {
+R6pp::UserSeasonStat R6pp::R6Connection::GetUserSeasonStat(const SearchedUser &user, const BaseSeason &season,const Region &region) {
 	if (user.profileId.empty())
 		throw Exceptions::InputArgumentsInvalid("Missing profileID");
 
 	return this->GetUserSeasonStatByID(user.profileId,season,region);
 }
 
-R6pp::UserSeasonStat R6pp::R6Connection::GetUserSeasonStat(std::string username, BaseSeason season, Region region, R6pp::PlatformType type) {
+R6pp::UserSeasonStat R6pp::R6Connection::GetUserSeasonStat(std::string username, const BaseSeason &season, const Region &region, R6pp::PlatformType type) {
 	if (username.empty())
 		throw Exceptions::InputArgumentsInvalid("Missing username");
 
@@ -642,7 +642,7 @@ R6pp::UserGametypeStat R6pp::R6Connection::GetUserGametypeStatByID(std::string p
 	return ugs;
 }
 
-R6pp::UserGametypeStat R6pp::R6Connection::GetUserGametypeStat(SearchedUser user) {
+R6pp::UserGametypeStat R6pp::R6Connection::GetUserGametypeStat(const SearchedUser &user) {
 	if (user.profileId.empty())
 		throw Exceptions::InputArgumentsInvalid("Missing profileID");
 
@@ -701,7 +701,7 @@ R6pp::UserGeneralStat R6pp::R6Connection::GetUserGeneralStatByID(std::string pro
 
 }
 
-R6pp::UserGeneralStat R6pp::R6Connection::GetUserGeneralStat(SearchedUser user) {
+R6pp::UserGeneralStat R6pp::R6Connection::GetUserGeneralStat(const SearchedUser &user) {
 	if (user.profileId.empty())
 		throw Exceptions::InputArgumentsInvalid("Missing profileID");
 
@@ -759,7 +759,7 @@ R6pp::UserGamemodeStat R6pp::R6Connection::GetUserGamemodeStatByID(std::string p
 
 	return ugs;
 }
-R6pp::UserGamemodeStat R6pp::R6Connection::GetUserGamemodeStat(SearchedUser user) {
+R6pp::UserGamemodeStat R6pp::R6Connection::GetUserGamemodeStat(const SearchedUser &user) {
 	if (user.profileId.empty())
 		throw Exceptions::InputArgumentsInvalid("Missing profileID");
 
@@ -805,7 +805,7 @@ R6pp::PlayerProfile R6pp::R6Connection::GetPlayerProfileByID(std::string profile
 	return pp;
 }
 
-R6pp::PlayerProfile R6pp::R6Connection::GetPlayerProfile(SearchedUser user) {
+R6pp::PlayerProfile R6pp::R6Connection::GetPlayerProfile(const SearchedUser &user) {
 	if (user.profileId.empty())
 		throw Exceptions::InputArgumentsInvalid("Missing profileID");
 

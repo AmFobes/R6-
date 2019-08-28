@@ -83,6 +83,8 @@ namespace R6pp {
 			return "psn";
 		case PlatformType::Xbox:
 			return "xbl";
+		default:
+			return "uplay";
 		}
 	}
 
@@ -95,6 +97,7 @@ namespace R6pp {
 			return PlatformType::PSN;
 		if (type == "xbl")
 			return PlatformType::Xbox;
+		return PlatformType::Uplay;
 	}
 
 	struct SearchedUser {
@@ -169,7 +172,7 @@ namespace R6pp {
 			this->number = number;
 			this->name = name;
 		}
-		inline BaseWeapon() {};
+		inline BaseWeapon() : number(0), name(""){};
 	};
 	static BaseWeapon
 		AR(1, "Assault Rifle"),
@@ -209,6 +212,7 @@ namespace R6pp {
 			return "emea";
 		if (region == Region::Asia)
 			return "apac";
+		return "ncsa";
 	}
 
 	inline Region StringToRegion(std::string region) {
@@ -220,6 +224,7 @@ namespace R6pp {
 			return Region::Europe;
 		if (region == "apac")
 			return Region::Asia;
+		return Region::America;
 	}
 
 	struct BaseSeason {
@@ -229,7 +234,7 @@ namespace R6pp {
 			this->SeasonID = SeasonID;
 			this->SeasonName = SeasonName;
 		}
-		inline BaseSeason() {}
+		inline BaseSeason() : SeasonID(0), SeasonName(""){}
 	};
 	static BaseSeason
 		Current(-1, ""), PhantomSight(14, "Phantom Sight"), BurntHorizon(13, "Burnt Horizon"),
@@ -252,44 +257,36 @@ namespace R6pp {
 		std::string board_id;
 		int deaths;
 		int kills;
-		int last_match_mmr_change;
+		double last_match_mmr_change;
 		int last_match_result;
-		int last_match_skill_mean_change;
-		int last_match_skill_stdev_change;
+		double last_match_skill_mean_change;
+		double last_match_skill_stdev_change;
 		int losses;
-		int max_mmr;
-		int max_rank;
-		int mmr;
-		int next_rank_mmr;
-		int previous_rank_mmr;
+		double max_mmr;
+		double max_rank;
+		double mmr;
+		double next_rank_mmr;
+		double previous_rank_mmr;
 		std::string profile_id;
 		int rank;
 		Region typeRegion;
 		std::string region;
 		int season;
-		int skill_mean;
-		int skill_stdev;
+		double skill_mean;
+		double skill_stdev;
 		std::string update_time;
 		int wins;
 	};
-
+	   
 	struct UserGametypeStat {
-		struct baseCasual {
+		struct baseGametype {
 			int death;
 			int kills;
 			int matchlost;
 			int matchplayed;
 			int matchwon;
-			long timeplayed;
-		} Casual;
-		struct baseRanked {
-			int death;
-			int kills;
-			int matchlost;
-			int matchplayed;
-			int matchwon;
-			long timeplayed;
-		} Ranked;
+			int64_t timeplayed;
+		} Casual, Ranked;		
 	};
 
 	struct UserGeneralStat {
@@ -305,7 +302,7 @@ namespace R6pp {
 		int meleekills;
 		int penetrationkills;
 		int revive;
-		long timeplayed;
+		int64_t timeplayed;
 	};
 
 	struct UserGamemodeStat {
