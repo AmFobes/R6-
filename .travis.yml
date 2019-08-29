@@ -24,7 +24,10 @@ addons:
         - g++
         - cmake
         - clang-3.3
-            
+    sonarcloud:
+        organization: "amfobes"
+        token: 
+            secure: "q0M2+3M7BgH1B8a9WuwcPAlDhiTn9XphslDpCydmgl/4UF3ShMk8WCk0MXG/GsruPwGqlOq8kNLO5by05Qx6OaiOrrDJ+zbHl31tqCW8sC6G+SVc066gOOPOYRCG7XNJthI/uIYBSb7C+FU5b1G2rdjmjr3aMO8wpNHL0VAF9vvDYSMtpm9QLMKuy1C6t0/PxqfHEch2IVPudaw6JOMGfuIo321UdcMFImRS9uatJ/HM49aps4vKWFilZDNE/hcwxaVF5n87ogyHKm8OY+0GxZmYICkx/R6CZ1Xdg7mDd0ePSnn8k2BMgcnuRGhOJTpwmX5nrwsYe/d0z8GvFFwbCPPaN79V2cnpV97rMzSh2B+L/sgqjQozi6jejEUlKrIoUjraFMyUBbKTcYd1EQ4GZmagFRSu1orYi7FDjFk81Wj3O7Wtp1T2/+xd7fvGVIvE2iZGr48ZdPOlbtmK7FE97kLp+4SOhIDTb9GrB1qhGUX8UTjNRF7Rp8Sg7mQbMptyAnfCkYf5A3zIPEhSjmpKS8SMIjJtWfVxPuvW0HQur5MkGASDwC9RFNUX2iSF7ubZxSWIKf1hz5Gse4rWg8vE3WA+kdlk4now71G1MlFz4KQ9IVkfTM9QB6A1GpHSmUe7QKRnaRfUZBgJ8j4vfRZ8PN7QqJkJE+5ss9CmA114fU8="
 before_script:
     - cd R6pp
     - mkdir build
@@ -32,8 +35,8 @@ before_script:
     - cmake ..
       
 script:
-    make
-    
+    - make
+    - sonar-scanner
 after_success:
   - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
   - chmod +x send.sh
