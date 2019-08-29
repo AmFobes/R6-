@@ -1,45 +1,41 @@
 dist: trusty
 sudo: require
-
 branches:
   only:
   - master
-
 language: cpp
-
 compiler:
-    - g++
-    - clang++
-
+- g++
+- clang++
 os:
-    - linux
-    - osx
-
-addons: 
-    apt: 
-        sources:
-            - ubuntu-toolchain-r-test
-        packages:
-        - gcc
-        - g++
-        - cmake
-        - clang-3.3
-            
+- linux
+- osx
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+    - gcc
+    - g++
+    - cmake
+    - clang-3.3
+  sonarcloud:
+    organization: amfobes
+    token:
+      secure: "X4UHfZO4zxFGMHT0qYV3Af34SZuLsclOedzAb8sq4MrWBipQEauhIxafvdXLqVsOWBnjxpUVDkuPZxzwpuXzRmRvuH+njDMs46s5QMMyBWhnq3EJ7Iz0F6M9LhcraWgirMI6q5AhNPdDLherOl1STFq6pUDClb6qoN3cj2lLFoAem+HwcCJIgN2vhO197RXlwVLDuDhhKRW8L+rA26EIAid0dasS6m1RJDgooEwPyYbRAzmBhVWgVcQa1Yk+AAfTvnMGnOFyDmB3/vg8I2+6NEEjyTGLzL+qMK6f1WvIRqogzImYCTHvBELuQB1aNtzP3jXfpmilTKzq/xlKLDJoXeFILPwXf0oNufYNcorc7HnXXKI4hUKqVH0Q7cDptCC8wXiyYGjld/q6GgmZSEatEl4B6Twwkg6xQEs3UPLGnJg+zHfMpEmcBZuX2Phw6U3YU5dFBWBtxyTH3nA+8/YvZuM+ac5ZjVs08EdnprNQiIJzlvd/6nETlhjdGGFU67Gr5wmbZmsE6a6Vgor10qWy6Sz97QFeGkKxu9Nmq9u6q+QD+Sw7f4krk59KC/9OtnliKvygDtBBWKxxgQAb6B7Zk67sUylrmIk37N65kxyL6NPRjPL3Hu55h5aV2NAq3nFIQoPB2wso21Lv3Aw9dJRc6fViPpH4VcN7KpgEn1V5ca8="
 before_script:
-    - cd R6pp
-    - mkdir build
-    - cd build
-    - cmake ..
-      
+- cd R6pp
+- mkdir build
+- cd build
+- cmake ..
 script:
-    make
-    
+- make
+- sonar-scanner
 after_success:
-  - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
-  - chmod +x send.sh
-  - ./send.sh success $WEBHOOK_URL
+- wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
+- chmod +x send.sh
+- "./send.sh success $WEBHOOK_URL"
 after_failure:
-  - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
-  - chmod +x send.sh
-  - ./send.sh failure $WEBHOOK_URL
-    
+- wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
+- chmod +x send.sh
+- "./send.sh failure $WEBHOOK_URL"
