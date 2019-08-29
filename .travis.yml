@@ -29,8 +29,8 @@ before_script:
 - cd build
 - cmake ..
 script:
-- make
-- sonar-scanner
+    - make
+    - sonar-scanner
 after_success:
 - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
 - chmod +x send.sh
