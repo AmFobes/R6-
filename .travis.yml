@@ -22,15 +22,14 @@ addons:
   sonarcloud:
     organization: amfobes
     token:
-      secure: "X4UHfZO4zxFGMHT0qYV3Af34SZuLsclOedzAb8sq4MrWBipQEauhIxafvdXLqVsOWBnjxpUVDkuPZxzwpuXzRmRvuH+njDMs46s5QMMyBWhnq3EJ7Iz0F6M9LhcraWgirMI6q5AhNPdDLherOl1STFq6pUDClb6qoN3cj2lLFoAem+HwcCJIgN2vhO197RXlwVLDuDhhKRW8L+rA26EIAid0dasS6m1RJDgooEwPyYbRAzmBhVWgVcQa1Yk+AAfTvnMGnOFyDmB3/vg8I2+6NEEjyTGLzL+qMK6f1WvIRqogzImYCTHvBELuQB1aNtzP3jXfpmilTKzq/xlKLDJoXeFILPwXf0oNufYNcorc7HnXXKI4hUKqVH0Q7cDptCC8wXiyYGjld/q6GgmZSEatEl4B6Twwkg6xQEs3UPLGnJg+zHfMpEmcBZuX2Phw6U3YU5dFBWBtxyTH3nA+8/YvZuM+ac5ZjVs08EdnprNQiIJzlvd/6nETlhjdGGFU67Gr5wmbZmsE6a6Vgor10qWy6Sz97QFeGkKxu9Nmq9u6q+QD+Sw7f4krk59KC/9OtnliKvygDtBBWKxxgQAb6B7Zk67sUylrmIk37N65kxyL6NPRjPL3Hu55h5aV2NAq3nFIQoPB2wso21Lv3Aw9dJRc6fViPpH4VcN7KpgEn1V5ca8="
+      secure: "XngYx5ILY09oQGUjuKGe8I8wWFZKB2tS4piMLOjxnmdtlc9K625lwGiMEsS1fTc8djwkY9D26B5SHyzhwUA69gjwPgBGIREmgAMG507p9DI8/Cz3CUapXSrksIPCmJ8lYtx/WhlNRKjWyeAsbLQ4kwykei/M+t7VMThWmTJ9DlF9v7IwYaPBhuI6ZsxPZcAd/T7xuUCNKVlmDzzZ1qK6QFRtVlfWnht+1oenJ94nQxqGOP1YPJG1RvGm51djQrOmfHnk+dRNMnaenRn/KE6GxoOS9cfKD8vCJmHUFCbfW6+oI7OtIetnU52ic5wEq0+zrMDGwJZvRn/EwyVXsHh2Dh47lsX+rrLoo0XQlHvpIedUTLBrl5ceM5jQiDcJG9wUAyfBvLP9PSJFL8g6TUQtGVFO3FbbMQnjP3Rp9iwVPIzWdgkwpzZSFMNgfwecN4iQy7zLsiOI1kXpl8U1/w+0TBd7LhVyjk/r2TsYLNDwXvtRL9+XTk59afAlZgVh5B8KL6whwdsnmWG9O7oafW2MJ0O3Hb7ySOjZkHTD/x3tm4SwUHJ2NpqX3XTwpDSeG3EcEHAKt1YdWoPzhwU+U6zEC5d8R0FsrBbkaXkN/lExkOYdZW4NpsDLoge1+fTPDYlWbRoRkv/2sQ+bLhC+VN93+VifK3LdFJ3GLRSVYXRiUUU="
 before_script:
 - cd R6pp
-- mkdir build
-- cd build
 - cmake ..
 script:
-    - make
-    - sonar-scanner
+    - if [ "$TRAVIS_OS_NAME" = "linux" ]; then build-wrapper-linux-x86-64 --out-dir bw-outputs make; fi
+    - if [ "$TRAVIS_OS_NAME" = "osx" ]; then build-wrapper-macosx-x86 --out-dir bw-outputs make; fi
+    - sonar-scanner -Dproject.settings=./sonar-project.properties
 after_success:
 - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
 - chmod +x send.sh
