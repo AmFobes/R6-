@@ -25,7 +25,7 @@ addons:
       secure: "XngYx5ILY09oQGUjuKGe8I8wWFZKB2tS4piMLOjxnmdtlc9K625lwGiMEsS1fTc8djwkY9D26B5SHyzhwUA69gjwPgBGIREmgAMG507p9DI8/Cz3CUapXSrksIPCmJ8lYtx/WhlNRKjWyeAsbLQ4kwykei/M+t7VMThWmTJ9DlF9v7IwYaPBhuI6ZsxPZcAd/T7xuUCNKVlmDzzZ1qK6QFRtVlfWnht+1oenJ94nQxqGOP1YPJG1RvGm51djQrOmfHnk+dRNMnaenRn/KE6GxoOS9cfKD8vCJmHUFCbfW6+oI7OtIetnU52ic5wEq0+zrMDGwJZvRn/EwyVXsHh2Dh47lsX+rrLoo0XQlHvpIedUTLBrl5ceM5jQiDcJG9wUAyfBvLP9PSJFL8g6TUQtGVFO3FbbMQnjP3Rp9iwVPIzWdgkwpzZSFMNgfwecN4iQy7zLsiOI1kXpl8U1/w+0TBd7LhVyjk/r2TsYLNDwXvtRL9+XTk59afAlZgVh5B8KL6whwdsnmWG9O7oafW2MJ0O3Hb7ySOjZkHTD/x3tm4SwUHJ2NpqX3XTwpDSeG3EcEHAKt1YdWoPzhwU+U6zEC5d8R0FsrBbkaXkN/lExkOYdZW4NpsDLoge1+fTPDYlWbRoRkv/2sQ+bLhC+VN93+VifK3LdFJ3GLRSVYXRiUUU="
 before_script:
 - cd R6pp
-- cmake ..
+- cmake .
 script:
     - if [ "$TRAVIS_OS_NAME" = "linux" ]; then build-wrapper-linux-x86-64 --out-dir bw-outputs make; fi
     - if [ "$TRAVIS_OS_NAME" = "osx" ]; then build-wrapper-macosx-x86 --out-dir bw-outputs make; fi
