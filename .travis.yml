@@ -3,6 +3,7 @@ sudo: require
 branches:
   only:
   - master
+  - dev
 language: cpp
 compiler:
 - g++
