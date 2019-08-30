@@ -70,6 +70,7 @@ namespace R6pp{
 		PlayerProfile GetPlayerProfileByID(std::string profileID);
 	};
 
+	ServiceStatus GetServiceStatus();
 
 };
 
