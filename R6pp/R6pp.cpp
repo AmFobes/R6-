@@ -5,50 +5,6 @@
 
 
 #include <string>
-
-R6pp::ServiceStatus R6pp::GetServiceStatus() {
-	auto resp =
-		cpr::Get(cpr::Url{ "https://game-status-api.ubisoft.com/v1/instances?appIds=e3d5ea9e-50bd-43b7-88bf-39794f4e3d40,fb4cc4c9-2063-461d-a1e8-84a7d36525fc,4008612d-3baf-49e4-957a-33066726a7bc" });
-
-	if (resp.error || resp.status_code != 200)
-		throw Exceptions::FatalConnectionError("Request error when retrieving service stats. \"" + resp.error.message + "\" HTTP status code " + std::to_string(resp.status_code));
-
-	rapidjson::Document doc;
-	doc.Parse(resp.text.c_str());
-
-	if (doc.HasParseError())
-		throw Exceptions::JsonParseError("Error when parsing json. Raw response: " + resp.text);
-
-	ServiceStatus sStatus;
-
-	for (auto& platform : doc.GetArray()) {
-
-		if (platform["Platform"].GetString() == "PC") {
-			sStatus.PC.AppID = platform["AppID"].GetString();
-			sStatus.PC.Category = platform["Category"].GetString();
-			sStatus.PC.Maintenance = platform["Maintenance"].IsNull() ? "" : platform["Maintenance"].GetString();
-			sStatus.PC.Name = platform["Name"].GetString();
-			sStatus.PC.Status = platform["Status"].GetString();
-		}
-		else if (platform["Platform"].GetString() == "PS4") {
-			sStatus.PS4.AppID = platform["AppID"].GetString();
-			sStatus.PS4.Category = platform["Category"].GetString();
-			sStatus.PS4.Maintenance = platform["Maintenance"].IsNull() ? "" : platform["Maintenance"].GetString();
-			sStatus.PS4.Name = platform["Name"].GetString();
-			sStatus.PS4.Status = platform["Status"].GetString();
-
-		}
-		else if (platform["Platform"].GetString() == "XBOXONE") {
-			sStatus.XBOXONE.AppID = platform["AppID"].GetString();
-			sStatus.XBOXONE.Category = platform["Category"].GetString();
-			sStatus.XBOXONE.Maintenance = platform["Maintenance"].IsNull() ? "" : platform["Maintenance"].GetString();
-			sStatus.XBOXONE.Name = platform["Name"].GetString();
-			sStatus.XBOXONE.Status = platform["Status"].GetString();
-		}
-	}
-};
-
-
 R6pp::R6Connection::R6Connection(std::string email, std::string password) {
 	if (email.empty() || password.empty())
 		throw Exceptions::InputArgumentsInvalid("The email or password field is empty");
