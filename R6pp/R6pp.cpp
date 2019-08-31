@@ -21,16 +21,16 @@ R6pp::ServiceStatus R6pp::GetServiceStatus() {
 		
 	ServiceStatus sStatus;
 
-	 for (auto& platform : doc.GetArray()) {
-
-		if (platform["Platform"].GetString() == "PC") {
+	for (rapidjson::Value& platform : doc.GetArray()) {
+		 std::string platformType = platform["Platform"].GetString();
+		if (platformType == "PC") {
 			sStatus.PC.AppID = platform["AppID"].GetString();
 			sStatus.PC.Category = platform["Category"].GetString();
 			sStatus.PC.Maintenance = platform["Maintenance"].IsNull() ? "" : platform["Maintenance"].GetString();
 			sStatus.PC.Name = platform["Name"].GetString();
 			sStatus.PC.Status = platform["Status"].GetString();
 		}
-		else if (platform["Platform"].GetString() == "PS4") {
+		else if (platformType == "PS4") {
 			sStatus.PS4.AppID = platform["AppID"].GetString();
 			sStatus.PS4.Category = platform["Category"].GetString();
 			sStatus.PS4.Maintenance = platform["Maintenance"].IsNull() ? "" : platform["Maintenance"].GetString();
@@ -38,7 +38,7 @@ R6pp::ServiceStatus R6pp::GetServiceStatus() {
 			sStatus.PS4.Status = platform["Status"].GetString();
 
 		}
-		else if (platform["Platform"].GetString() == "XBOXONE") {
+		else if (platformType == "XBOXONE") {
 			sStatus.XBOXONE.AppID = platform["AppID"].GetString();
 			sStatus.XBOXONE.Category = platform["Category"].GetString();
 			sStatus.XBOXONE.Maintenance = platform["Maintenance"].IsNull() ? "" : platform["Maintenance"].GetString();
