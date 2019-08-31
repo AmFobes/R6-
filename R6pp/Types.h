@@ -48,17 +48,17 @@ namespace Exceptions {
 }
 
 namespace R6pp {
-
+	
 	struct ServiceStatus {
-		struct Status {
+		struct platformStatus {
+			
 			std::string AppID;
 			std::string Category;
 			std::string Maintenance;
 			std::string Name;
 			std::string Platform;
 			std::string Status;
-		};
-		Status PC, PS4, XBOXONE;
+		}PC,PS4,XBOXONE;
 	};
 
 	struct AuthenticationHeader {

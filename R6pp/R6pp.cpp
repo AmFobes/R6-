@@ -18,10 +18,10 @@ R6pp::ServiceStatus R6pp::GetServiceStatus() {
 
 	if (doc.HasParseError())
 		throw Exceptions::JsonParseError("Error when parsing json. Raw response: " + resp.text);
-
+		
 	ServiceStatus sStatus;
 
-	for (auto& platform : doc.GetArray()) {
+	 for (auto& platform : doc.GetArray()) {
 
 		if (platform["Platform"].GetString() == "PC") {
 			sStatus.PC.AppID = platform["AppID"].GetString();
@@ -46,6 +46,8 @@ R6pp::ServiceStatus R6pp::GetServiceStatus() {
 			sStatus.XBOXONE.Status = platform["Status"].GetString();
 		}
 	}
+	
+	 return sStatus;
 };
 
 
