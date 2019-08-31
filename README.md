@@ -1,7 +1,5 @@
-# R6++
-[![Language grade: C/C++](https://img.shields.io/lgtm/grade/cpp/g/AmFobes/R6pp.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/AmFobes/R6pp/context:cpp)
-[![Total alerts](https://img.shields.io/lgtm/alerts/g/AmFobes/R6pp.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/AmFobes/R6pp/alerts/)
-
-[![Build Status](https://travis-ci.org/AmFobes/R6pp.svg?branch=master)](https://travis-ci.org/AmFobes/R6pp)
-[![Build status](https://ci.appveyor.com/api/projects/status/q0vkcfb4injjgvek/branch/master?svg=true)](https://ci.appveyor.com/project/AmFobes/r6pp/branch/master)
+# R6++ (DEV BRANCH)
+## Things may not work so be careful
+[![Build Status](https://travis-ci.org/AmFobes/R6pp.svg?branch=dev)](https://travis-ci.org/AmFobes/R6pp)
+[![Build status](https://ci.appveyor.com/api/projects/status/q0vkcfb4injjgvek/branch/dev?svg=true)](https://ci.appveyor.com/project/AmFobes/r6pp/branch/dev)
 ## For information and usage go [here](https://amfobes.github.io/R6pp/)
