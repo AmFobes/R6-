@@ -21,19 +21,29 @@ R6pp::ServiceStatus R6pp::GetServiceStatus() {
 		
 	ServiceStatus sStatus;
 
-	for (rapidjson::Value& platform : doc.GetArray()) {
+	 for (rapidjson::Value& platform : doc.GetArray()) {
 		 std::string platformType = platform["Platform"].GetString();
 		if (platformType == "PC") {
 			sStatus.PC.AppID = platform["AppID"].GetString();
 			sStatus.PC.Category = platform["Category"].GetString();
-			sStatus.PC.Maintenance = platform["Maintenance"].IsNull() ? "" : platform["Maintenance"].GetString();
+			if (platform["Maintenance"].IsNull())
+				sStatus.PC.Maintenance = "";
+			else if (platform["Maintenance"].IsBool())
+				sStatus.PC.Maintenance = platform["Maintenance"].GetBool() ? "true" : "false";
+			else
+				sStatus.PC.Maintenance = platform["Maintenance"].GetString();
 			sStatus.PC.Name = platform["Name"].GetString();
 			sStatus.PC.Status = platform["Status"].GetString();
 		}
 		else if (platformType == "PS4") {
 			sStatus.PS4.AppID = platform["AppID"].GetString();
 			sStatus.PS4.Category = platform["Category"].GetString();
-			sStatus.PS4.Maintenance = platform["Maintenance"].IsNull() ? "" : platform["Maintenance"].GetString();
+			if (platform["Maintenance"].IsNull())
+				sStatus.PS4.Maintenance = "";
+			else if (platform["Maintenance"].IsBool())
+				sStatus.PS4.Maintenance = platform["Maintenance"].GetBool() ? "true" : "false";
+			else
+				sStatus.PS4.Maintenance = platform["Maintenance"].GetString();
 			sStatus.PS4.Name = platform["Name"].GetString();
 			sStatus.PS4.Status = platform["Status"].GetString();
 
@@ -41,7 +51,12 @@ R6pp::ServiceStatus R6pp::GetServiceStatus() {
 		else if (platformType == "XBOXONE") {
 			sStatus.XBOXONE.AppID = platform["AppID"].GetString();
 			sStatus.XBOXONE.Category = platform["Category"].GetString();
-			sStatus.XBOXONE.Maintenance = platform["Maintenance"].IsNull() ? "" : platform["Maintenance"].GetString();
+			if (platform["Maintenance"].IsNull())
+				sStatus.XBOXONE.Maintenance = "";
+			else if (platform["Maintenance"].IsBool())
+				sStatus.XBOXONE.Maintenance = platform["Maintenance"].GetBool() ? "true" : "false";
+			else
+				sStatus.XBOXONE.Maintenance = platform["Maintenance"].GetString();
 			sStatus.XBOXONE.Name = platform["Name"].GetString();
 			sStatus.XBOXONE.Status = platform["Status"].GetString();
 		}
@@ -49,7 +64,6 @@ R6pp::ServiceStatus R6pp::GetServiceStatus() {
 	
 	 return sStatus;
 };
-
 
 R6pp::R6Connection::R6Connection(std::string email, std::string password) {
 	if (email.empty() || password.empty())
