@@ -6,7 +6,7 @@ nav_order: 6
 permalink: "/R6Connection/GetUserOperatorStats"
 ---
 
-### Return Type: [UserOperatorStats](/Types/UserOperatorStats)
+### Return Type: [UserOperatorStats](/R6pp/Types/UserOperatorStats)
 
 ### Arguments 
 ```cpp 

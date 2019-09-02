@@ -6,7 +6,7 @@ nav_order: 13
 permalink: "/R6Connection/GetPlayerProfile"
 ---
 
-### Return Type: [PlayerProfile](/Types/PlayerProfile)
+### Return Type: [PlayerProfile](/R6pp/Types/PlayerProfile)
 
 ### Arguments 
 ```cpp 

@@ -29,4 +29,4 @@ struct AuthenticationHeader {
 
 ### Note(s)
 Get the read-only constructor initialized auth header by calling
-[R6Connection.GetAuthHeader()](/R6Connection/GetAuthHeader)
+[R6Connection.GetAuthHeader()](/R6pp/R6Connection/GetAuthHeader)

@@ -14,4 +14,4 @@ typedef std::vector<UserWeaponStat> UserWeaponStats;
 ```
 
 ### Note(s)
-[UserWeaponStat](/Types/UserWeaponStat)
+[UserWeaponStat](/R6pp/Types/UserWeaponStat)

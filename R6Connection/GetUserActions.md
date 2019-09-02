@@ -6,7 +6,7 @@ nav_order: 5
 permalink: "/R6Connection/GetUserActions"
 ---
 
-### Return Type: [UserActions](/Types/UserActions)
+### Return Type: [UserActions](/R6pp/Types/UserActions)
 
 ### Arguments 
 ```cpp 

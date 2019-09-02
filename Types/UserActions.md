@@ -13,4 +13,4 @@ permalink: "/Types/UserActions"
 typedef std::vector<UserAction> UserActions;
 ```
 ### Note(s)
-[UserAction](/Types/UserAction)
+[UserAction](/R6pp/Types/UserAction)

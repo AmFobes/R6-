@@ -6,7 +6,7 @@ nav_order: 1
 permalink: "/R6Connection/R6Connection"
 ---
 
-### Return Type: [R6Connection](/R6Connection)
+### Return Type: [R6Connection](/R6pp/R6Connection)
 
 ### Arguments
 * `std::string` email

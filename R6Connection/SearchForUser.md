@@ -6,7 +6,7 @@ nav_order: 2
 permalink: "/R6Connection/SearchForUser"
 ---
 
-### Return Type: [SearchedUser](/Types/SearchedUser)
+### Return Type: [SearchedUser](/R6pp/Types/SearchedUser)
 
 ### Arguments 
 ```cpp 

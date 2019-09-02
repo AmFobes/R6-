@@ -17,4 +17,4 @@ struct Group {
 ```
 
 ### Note(s)
-Group is used by [UserAction](Types/UserAction)
+Group is used by [UserAction](/R6pp/Types/UserAction)

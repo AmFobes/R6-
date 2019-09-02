@@ -19,4 +19,4 @@ struct SearchedUser {
 };
 ```
 ### Note(s)
-Search for a user using [R6Connection.SearchForUser(string,PlatformType)](/R6Connection/SearchForUser)
+Search for a user using [R6Connection.SearchForUser(string,PlatformType)](/R6pp/R6Connection/SearchForUser)

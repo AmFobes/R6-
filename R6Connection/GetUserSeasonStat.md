@@ -6,7 +6,7 @@ nav_order: 10
 permalink: "/R6Connection/GetUserSeasonStat"
 ---
 
-### Return Type: [UserSeasonStat](/Types/UserSeasonStat)
+### Return Type: [UserSeasonStat](/R6pp/Types/UserSeasonStat)
 
 ### Arguments 
 ```cpp 

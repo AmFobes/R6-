@@ -13,4 +13,4 @@ permalink: "/Types/UserOperatorStats"
 typedef std::vector<UserOperatorStat> UserOperatorStats;
 ```
 ### Note(s)
-[UserOperator](/Types/UserOperator)
+[UserOperator](/R6pp/Types/UserOperator)

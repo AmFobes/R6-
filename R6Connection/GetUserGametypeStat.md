@@ -6,7 +6,7 @@ nav_order: 11
 permalink: "/R6Connection/GetUserGametypeStat"
 ---
 
-### Return Type: [UserGametypeStat](/Types/UserGametypeStat)
+### Return Type: [UserGametypeStat](/R6pp/Types/UserGametypeStat)
 
 ### Arguments 
 ```cpp 

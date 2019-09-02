@@ -6,4 +6,4 @@ nav_order: 14
 permalink: "/Types/Weapon"
 ---
 
-# Covered [here](/Types/BaseWeapon)
+# Covered [here](/R6pp/Types/BaseWeapon)

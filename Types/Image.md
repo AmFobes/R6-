@@ -17,4 +17,4 @@ struct Image {
 ```
 
 ### Note(s)
-Image is used by [UserAction](Types/UserAction)
+Image is used by [UserAction](/R6pp/Types/UserAction)

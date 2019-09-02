@@ -6,4 +6,4 @@ nav_order: 19
 permalink: "/Types/Season"
 ---
 
-# Covered [here](/Types/BaseSeason)
+# Covered [here](/R6pp/Types/BaseSeason)

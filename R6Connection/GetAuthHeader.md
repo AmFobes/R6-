@@ -6,7 +6,7 @@ nav_order: 3
 permalink: "/R6Connection/GetAuthHeader"
 ---
 
-### Return Type: [AuthenticationHeader ](/Types/AuthenticationHeader )
+### Return Type: [AuthenticationHeader ](/R6pp/Types/AuthenticationHeader )
 
 ### Function arguments
  - none

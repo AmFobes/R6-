@@ -6,7 +6,7 @@ nav_order: 9
 permalink: "/R6Connection/GetUserWeaponStat"
 ---
 
-### Return Type: [UserWeaponStat](/Types/UserWeaponStat)
+### Return Type: [UserWeaponStat](/R6pp/Types/UserWeaponStat)
 
 ### Arguments 
 ```cpp 

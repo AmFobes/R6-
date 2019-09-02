@@ -6,7 +6,7 @@ nav_order: 4
 permalink: "/R6Connection/GetUserApplications"
 ---
 
-### Return Type: [UserApplications](/Types/UserApplications)
+### Return Type: [UserApplications](/R6pp/Types/UserApplications)
 
 ### Arguments 
 ```cpp 
