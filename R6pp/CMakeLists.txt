@@ -48,6 +48,8 @@ set(RAPIDJSON_BUILD_EXAMPLES OFF CACHE BOOL "")
 set(RAPIDJSON_BUILD_TESTS OFF CACHE BOOL "")
 add_subdirectory("dep/rapidjson")
 
+include_directories("dep/rapidjson/include")
+
 add_library(R6pp R6pp.cpp R6pp.h)
 
 target_link_libraries(R6pp ${CPR_LIBRARIES})
