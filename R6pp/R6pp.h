@@ -17,7 +17,7 @@ namespace R6pp{
 	class R6Connection {
 	private:
 		AuthenticationHeader _authHeader;
-
+		rapidjson::Document _sendCPRRequest(std::string url);
 	public:
 		R6Connection(std::string email, std::string password);
 

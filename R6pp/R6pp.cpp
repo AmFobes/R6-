@@ -6,6 +6,31 @@
 
 #include <string>
 
+rapidjson::Document checkCPRResponse(cpr::Response resp) {
+	if (resp.error || resp.status_code != 200)
+		throw Exceptions::FatalConnectionError("Request error when retrieving user applications. \"" + resp.error.message + "\" HTTP status code " + std::to_string(resp.status_code));
+
+	rapidjson::Document doc;
+	doc.Parse(resp.text.c_str());
+
+	if (doc.HasParseError())
+		throw Exceptions::JsonParseError("Error when parsing json. Raw response: " + resp.text);
+
+	return doc;
+}
+rapidjson::Document R6pp::R6Connection::_sendCPRRequest(std::string url) {
+	auto resp =
+		cpr::Get(cpr::Url{ url },
+			cpr::Header{ {"Authorization","Ubi_v1 t=" + this->_authHeader.ticket},
+						 {"Accept","application/json"},
+						 {"Ubi-AppId","39baebad-39e5-4552-8c25-2c9b919064e2" } },
+			cpr::VerifySsl(VERIFYSSL));
+
+	return checkCPRResponse(resp);
+}
+
+
+
 R6pp::ServiceStatus R6pp::GetServiceStatus() {
 	auto resp =
 		cpr::Get(cpr::Url{ "https://game-status-api.ubisoft.com/v1/instances?appIds=e3d5ea9e-50bd-43b7-88bf-39794f4e3d40,fb4cc4c9-2063-461d-a1e8-84a7d36525fc,4008612d-3baf-49e4-957a-33066726a7bc" });
@@ -77,16 +102,17 @@ R6pp::R6Connection::R6Connection(std::string email, std::string password) {
 						 {"Ubi-AppId","39baebad-39e5-4552-8c25-2c9b919064e2"} },
 			cpr::VerifySsl(VERIFYSSL));
 
-	if (resp.error || resp.status_code != 200)
-		throw Exceptions::FatalConnectionError("Request error when trying to authenticate with rainbow six. \"" + resp.error.message + "\" HTTP status code " + std::to_string(resp.status_code));
 
-	AuthenticationHeader header;
+	if (resp.error || resp.status_code != 200)
+		throw Exceptions::FatalConnectionError("Request error when retrieving user applications. \"" + resp.error.message + "\" HTTP status code " + std::to_string(resp.status_code));
 
 	rapidjson::Document doc;
 	doc.Parse(resp.text.c_str());
-	
+
 	if (doc.HasParseError())
 		throw Exceptions::JsonParseError("Error when parsing json. Raw response: " + resp.text);
+
+	AuthenticationHeader header;
 
 	_authHeader.clientIp = doc["clientIp"].GetString();
 	_authHeader.clientIpCountry = doc["clientIpCountry"].GetString();
@@ -107,24 +133,10 @@ R6pp::SearchedUsers R6pp::R6Connection::SearchForUser(std::string name,R6pp::Pla
 	if (name.empty())
 		throw Exceptions::InputArgumentsInvalid("The name field is empty");
 
-	auto resp =
-		cpr::Get(cpr::Url{ "https://public-ubiservices.ubi.com/v2/profiles?nameOnPlatform=" + name + "&platformType=" + PlatformTypeToString(platformType) },
-			cpr::Header{ {"Authorization", "Ubi_v1 t=" + this->_authHeader.ticket},
-						 {"Accept","application/json"},
-						 {"Ubi-AppId", "39baebad-39e5-4552-8c25-2c9b919064e2"}},
-			cpr::VerifySsl(VERIFYSSL));
-
-	if(resp.error || resp.status_code != 200)
-		throw Exceptions::FatalConnectionError("Request error when trying to search for a user.\"" + resp.error.message + "\" HTTP status code " + std::to_string(resp.status_code));
-
+	auto doc = _sendCPRRequest("https://public-ubiservices.ubi.com/v2/profiles?nameOnPlatform=" + name + "&platformType=" + PlatformTypeToString(platformType));
+	
 	SearchedUsers su;
 	
-	rapidjson::Document doc;
-	doc.Parse(resp.text.c_str());
-
-	if (doc.HasParseError())
-		throw Exceptions::JsonParseError("Error when parsing json. Raw response: " + resp.text);
-
 	for (auto& user : doc["profiles"].GetArray()) {
 		SearchedUser sUser;
 		sUser.idOnPlatform = user["idOnPlatform"].GetString();
@@ -152,24 +164,9 @@ R6pp::UserApplications R6pp::R6Connection::GetUserApplicationsByID(std::string p
 	std::stringstream applicationIds;
 	std::copy(applications.begin(), applications.end(), std::ostream_iterator<std::string>(applicationIds, ","));
 
-	auto resp =
-		cpr::Get(cpr::Url{ "https://public-ubiservices.ubi.com/v3/profiles/applications?applicationIds=" + applicationIds.str() + "&profileIds=" + profileID },
-			cpr::Header{ {"Authorization","Ubi_v1 t=" + this->_authHeader.ticket},
-						 {"Accept","application/json"},
-						 {"Ubi-AppId","39baebad-39e5-4552-8c25-2c9b919064e2" } },
-			cpr::VerifySsl(VERIFYSSL));
-
-	if (resp.error || resp.status_code != 200)
-		throw Exceptions::FatalConnectionError("Request error when retrieving user applications. \"" + resp.error.message + "\" HTTP status code " + std::to_string(resp.status_code));
+	auto doc =_sendCPRRequest("https://public-ubiservices.ubi.com/v3/profiles/applications?applicationIds=" + applicationIds.str() + "&profileIds=" + profileID);
 
 	UserApplications ua;
-
-	rapidjson::Document doc;
-	doc.Parse(resp.text.c_str());
-
-	if (doc.HasParseError())
-		throw Exceptions::JsonParseError("Error when parsing json. Raw response: " + resp.text);
-
 	for (auto& application : doc["applications"].GetArray()) {
 		UserApplication uapplication;
 		uapplication.applicationId = application["applicationId"].GetString();
@@ -181,7 +178,6 @@ R6pp::UserApplications R6pp::R6Connection::GetUserApplicationsByID(std::string p
 	}
 	return ua;
 }
-
 
 R6pp::UserApplications R6pp::R6Connection::GetUserApplications(const R6pp::SearchedUser &user, std::vector<std::string> applications) {
 	if (user.profileId.empty())
@@ -202,23 +198,9 @@ R6pp::UserActions R6pp::R6Connection::GetUserActionsByID(std::string profileID) 
 	if (profileID.empty())
 		throw Exceptions::InputArgumentsInvalid("Missing user profileID");
 
-	auto resp =
-	cpr::Get(cpr::Url{ "https://public-ubiservices.ubi.com/v1/profiles/" + profileID + "/uplay/actions?locale=en-us&spaceId=5172a557-50b5-4665-b7db-e3f2e8c5041d" },
-		cpr::Header{ {"Authorization","Ubi_v1 t=" + this->_authHeader.ticket},
-					 {"Accept","application/json"},
-					 {"Ubi-AppId","39baebad-39e5-4552-8c25-2c9b919064e2" } },
-		cpr::VerifySsl(VERIFYSSL));
-
-	if (resp.error || resp.status_code != 200)
-		throw Exceptions::FatalConnectionError("Request error when retrieving user applications. \"" + resp.error.message + "\" HTTP status code " + std::to_string(resp.status_code));
+	auto doc = _sendCPRRequest("https://public-ubiservices.ubi.com/v1/profiles/" + profileID + "/uplay/actions?locale=en-us&spaceId=5172a557-50b5-4665-b7db-e3f2e8c5041d");
 
 	UserActions ua;
-
-	rapidjson::Document doc;
-	doc.Parse(resp.text.c_str());
-
-	if (doc.HasParseError())
-		throw Exceptions::JsonParseError("Error when parsing json. Raw response: " + resp.text);
 
 	for (auto& userAction : doc["actions"].GetArray()) {
 		UserAction uaction;
@@ -257,6 +239,7 @@ R6pp::UserActions R6pp::R6Connection::GetUserActionsByID(std::string profileID) 
 	return ua;
 
 }
+
 R6pp::UserActions R6pp::R6Connection::GetUserActions(const SearchedUser &user) {
 	if (user.profileId.empty())
 		throw Exceptions::InputArgumentsInvalid("Missing user profileID");
@@ -277,36 +260,22 @@ R6pp::UserOperatorStats R6pp::R6Connection::GetUserOperatorStatsByID(std::string
 	if (profileID.empty())
 		throw Exceptions::InputArgumentsInvalid("Missing user profileID");
 
-	auto resp =
-		cpr::Get(cpr::Url{ "https://public-ubiservices.ubi.com/v1/spaces/5172a557-50b5-4665-b7db-e3f2e8c5041d/sandboxes/OSBOR_PC_LNCH_A/playerstats2/statistics?populations=" + profileID + "&statistics=" +	// Such a beauty
-			"operatorpvp_smoke_poisongaskill,operatorpvp_timeplayed,operatorpvp_roundwon,operatorpvp_roundlost,operatorpvp_kills,operatorpvp_death,operatorpvp_mute_gadgetjammed" +
-			",operatorpvp_sledge_hammerhole,operatorpvp_thatcher_gadgetdestroywithemp,operatorpvp_castle_kevlarbarricadedeployed,operatorpvp_ash_bonfirewallbreached,operatorpvp_pulse_heartbeatspot" +
-			",operatorpvp_thermite_reinforcementbreached,operatorpvp_doc_teammaterevive,operatorpvp_rook_armortakenteammate,operatorpvp_twitch_gadgetdestroybyshockdrone,operatorpvp_montagne_shieldblockdamage" +
-			",operatorpvp_glaz_sniperkill,operatorpvp_fuze_clusterchargekill,operatorpvp_kapkan_boobytrapkill,operatorpvp_tachanka_turretkill,operatorpvp_blitz_flashedenemy,operatorpvp_iq_gadgetspotbyef" +
-			",operatorpvp_jager_gadgetdestroybycatcher,operatorpvp_bandit_batterykill,operatorpvp_buck_kill,operatorpvp_frost_dbno,operatorpvp_blackbeard_gunshieldblockdamage,operatorpvp_valkyrie_camdeployed" +
-			",operatorpvp_capitao_lethaldartkills,operatorpvp_caveira_interrogations,operatorpvp_hibana_detonate_projectile,operatorpvp_echo_enemy_sonicburst_affected,operatorpvp_cazador_assist_kill" +
-			",operatorpvp_black_mirror_gadget_deployed,operatorpvp_dazzler_gadget_detonate,operatorpvp_caltrop_enemy_affected,operatorpvp_concussionmine_detonate,operatorpvp_concussiongrenade_detonate" +
-			",operatorpvp_phoneshacked,operatorpvp_attackerdrone_diminishedrealitymode,operatorpvp_tagger_tagdevice_spot,operatorpvp_rush_adrenalinerush,operatorpvp_barrage_killswithturret" +
-			",operatorpvp_deceiver_revealedattackers,operatorpvp_maverick_wallbreached,operatorpvp_clash_sloweddown,operatorpvp_mozzie_droneshacked,operatorpvp_gridlock_traxdeployed,operatorpvp_nokk_cameras_deceived" +
-			",operatorpvp_warden_kills_during_ability" },
-			cpr::Header{ {"Authorization","Ubi_v1 t=" + this->_authHeader.ticket},
-						 {"Accept","application/json"},
-						 {"Ubi-AppId","39baebad-39e5-4552-8c25-2c9b919064e2" } },
-			cpr::VerifySsl(VERIFYSSL));
+	auto doc = _sendCPRRequest("https://public-ubiservices.ubi.com/v1/spaces/5172a557-50b5-4665-b7db-e3f2e8c5041d/sandboxes/OSBOR_PC_LNCH_A/playerstats2/statistics?populations=" + profileID + "&statistics=" +	// Such a beauty
+		"operatorpvp_smoke_poisongaskill,operatorpvp_timeplayed,operatorpvp_roundwon,operatorpvp_roundlost,operatorpvp_kills,operatorpvp_death,operatorpvp_mute_gadgetjammed" +
+		",operatorpvp_sledge_hammerhole,operatorpvp_thatcher_gadgetdestroywithemp,operatorpvp_castle_kevlarbarricadedeployed,operatorpvp_ash_bonfirewallbreached,operatorpvp_pulse_heartbeatspot" +
+		",operatorpvp_thermite_reinforcementbreached,operatorpvp_doc_teammaterevive,operatorpvp_rook_armortakenteammate,operatorpvp_twitch_gadgetdestroybyshockdrone,operatorpvp_montagne_shieldblockdamage" +
+		",operatorpvp_glaz_sniperkill,operatorpvp_fuze_clusterchargekill,operatorpvp_kapkan_boobytrapkill,operatorpvp_tachanka_turretkill,operatorpvp_blitz_flashedenemy,operatorpvp_iq_gadgetspotbyef" +
+		",operatorpvp_jager_gadgetdestroybycatcher,operatorpvp_bandit_batterykill,operatorpvp_buck_kill,operatorpvp_frost_dbno,operatorpvp_blackbeard_gunshieldblockdamage,operatorpvp_valkyrie_camdeployed" +
+		",operatorpvp_capitao_lethaldartkills,operatorpvp_caveira_interrogations,operatorpvp_hibana_detonate_projectile,operatorpvp_echo_enemy_sonicburst_affected,operatorpvp_cazador_assist_kill" +
+		",operatorpvp_black_mirror_gadget_deployed,operatorpvp_dazzler_gadget_detonate,operatorpvp_caltrop_enemy_affected,operatorpvp_concussionmine_detonate,operatorpvp_concussiongrenade_detonate" +
+		",operatorpvp_phoneshacked,operatorpvp_attackerdrone_diminishedrealitymode,operatorpvp_tagger_tagdevice_spot,operatorpvp_rush_adrenalinerush,operatorpvp_barrage_killswithturret" +
+		",operatorpvp_deceiver_revealedattackers,operatorpvp_maverick_wallbreached,operatorpvp_clash_sloweddown,operatorpvp_mozzie_droneshacked,operatorpvp_gridlock_traxdeployed,operatorpvp_nokk_cameras_deceived" +
+		",operatorpvp_warden_kills_during_ability");
 
-	if (resp.error || resp.status_code != 200)
-		throw Exceptions::FatalConnectionError("Request error when retrieving user operator stats. \"" + resp.error.message + "\" HTTP status code " + std::to_string(resp.status_code));
-
-	R6pp::UserOperatorStats uos;
-	rapidjson::Document doc;
-	doc.Parse(resp.text.c_str());
-
-
-	if (doc.HasParseError())
-		throw Exceptions::JsonParseError("Error when parsing json. Raw response: " + resp.text);
 
 	auto stats = doc["results"][profileID.c_str()].GetObject();
 
+	UserOperatorStats uos;
 	for (auto& op : Operators::Operators) {
 		UserOperatorStat uoStat;
 		uoStat.baseOperator = op;
@@ -370,24 +339,8 @@ R6pp::UserOperatorStat R6pp::R6Connection::GetUserOperatorStatByID(std::string p
 	if (profileID.empty())
 		throw Exceptions::InputArgumentsInvalid("Missing user profileID");
 	
-	auto resp =
-		cpr::Get(cpr::Url{ "https://public-ubiservices.ubi.com/v1/spaces/5172a557-50b5-4665-b7db-e3f2e8c5041d/sandboxes/OSBOR_PC_LNCH_A/playerstats2/statistics?populations=" + profileID + "&statistics=operatorpvp_" + userOperator.unique + 
-			",operatorpvp_roundlost,operatorpvp_roundwon,operatorpvp_kills,operatorpvp_deaths,operatorpvp_timeplayed"},
-			cpr::Header{ {"Authorization","Ubi_v1 t=" + this->_authHeader.ticket},
-						 {"Accept","application/json"},
-						 {"Ubi-AppId","39baebad-39e5-4552-8c25-2c9b919064e2" } },
-			cpr::VerifySsl(VERIFYSSL));
-
-	if (resp.error || resp.status_code != 200)
-		throw Exceptions::FatalConnectionError("Request error when retrieving user operator stat. \"" + resp.error.message + "\" HTTP status code " + std::to_string(resp.status_code));
-
-	
-	rapidjson::Document doc;
-	doc.Parse(resp.text.c_str());
-
-
-	if (doc.HasParseError())
-		throw Exceptions::JsonParseError("Error when parsing json. Raw response: " + resp.text);
+	auto doc = _sendCPRRequest("https://public-ubiservices.ubi.com/v1/spaces/5172a557-50b5-4665-b7db-e3f2e8c5041d/sandboxes/OSBOR_PC_LNCH_A/playerstats2/statistics?populations=" + profileID + "&statistics=operatorpvp_" + userOperator.unique +
+		",operatorpvp_roundlost,operatorpvp_roundwon,operatorpvp_kills,operatorpvp_deaths,operatorpvp_timeplayed");
 
 	auto stats = doc["results"][profileID.c_str()].GetObject();
 
@@ -454,24 +407,9 @@ R6pp::UserWeaponStats R6pp::R6Connection::GetUserWeaponStatsByID(std::string pro
 	if (profileID.empty())
 		throw Exceptions::InputArgumentsInvalid("Missing profileID");
 
-	auto resp =
-		cpr::Get(cpr::Url{ "https://public-ubiservices.ubi.com/v1/spaces/5172a557-50b5-4665-b7db-e3f2e8c5041d/sandboxes/OSBOR_PC_LNCH_A/playerstats2/statistics?populations=" + profileID + "&statistics=weapontypepvp_kills,weapontypepvp_headshot,weapontypepvp_bulletfired,weapontypepvp_bullethit" },
-			cpr::Header{ {"Authorization","Ubi_v1 t=" + this->_authHeader.ticket},
-						 {"Accept","application/json"},
-						 {"Ubi-AppId","39baebad-39e5-4552-8c25-2c9b919064e2" } },
-			cpr::VerifySsl(VERIFYSSL));
-
-	if (resp.error || resp.status_code != 200)
-		throw Exceptions::FatalConnectionError("Request error when retrieving user weapon stats. \"" + resp.error.message + "\" HTTP status code " + std::to_string(resp.status_code));
+	auto doc = _sendCPRRequest("https://public-ubiservices.ubi.com/v1/spaces/5172a557-50b5-4665-b7db-e3f2e8c5041d/sandboxes/OSBOR_PC_LNCH_A/playerstats2/statistics?populations=" + profileID + "&statistics=weapontypepvp_kills,weapontypepvp_headshot,weapontypepvp_bulletfired,weapontypepvp_bullethit");
 
 	UserWeaponStats uws;
-
-	rapidjson::Document doc;
-	doc.Parse(resp.text.c_str());
-
-
-	if (doc.HasParseError())
-		throw Exceptions::JsonParseError("Error when parsing json. Raw response: " + resp.text);
 
 	auto stats = doc["results"][profileID.c_str()].GetObject();
 
@@ -526,24 +464,7 @@ R6pp::UserWeaponStat R6pp::R6Connection::GetUserWeaponStatByID(std::string profi
 		if (profileID.empty())
 			throw Exceptions::InputArgumentsInvalid("Missing profileID");
 
-		auto resp =
-			cpr::Get(cpr::Url{ "https://public-ubiservices.ubi.com/v1/spaces/5172a557-50b5-4665-b7db-e3f2e8c5041d/sandboxes/OSBOR_PC_LNCH_A/playerstats2/statistics?populations=" + profileID + "&statistics=weapontypepvp_kills,weapontypepvp_headshot,weapontypepvp_bulletfired,weapontypepvp_bullethit" },
-				cpr::Header{ {"Authorization","Ubi_v1 t=" + this->_authHeader.ticket},
-							 {"Accept","application/json"},
-							 {"Ubi-AppId","39baebad-39e5-4552-8c25-2c9b919064e2" } },
-				cpr::VerifySsl(VERIFYSSL));
-
-		if (resp.error || resp.status_code != 200)
-			throw Exceptions::FatalConnectionError("Request error when retrieving user weapon stat. \"" + resp.error.message + "\" HTTP status code " + std::to_string(resp.status_code));
-
-		
-
-		rapidjson::Document doc;
-		doc.Parse(resp.text.c_str());
-
-
-		if (doc.HasParseError())
-			throw Exceptions::JsonParseError("Error when parsing json. Raw response: " + resp.text);
+		auto doc = _sendCPRRequest("https://public-ubiservices.ubi.com/v1/spaces/5172a557-50b5-4665-b7db-e3f2e8c5041d/sandboxes/OSBOR_PC_LNCH_A/playerstats2/statistics?populations=" + profileID + "&statistics=weapontypepvp_kills,weapontypepvp_headshot,weapontypepvp_bulletfired,weapontypepvp_bullethit");
 
 		auto stats = doc["results"][profileID.c_str()].GetObject();
 
@@ -597,25 +518,9 @@ R6pp::UserSeasonStat R6pp::R6Connection::GetUserSeasonStatByID(std::string profi
 	if (profileID.empty())
 		throw Exceptions::InputArgumentsInvalid("Missing profileID");
 
-	auto resp =
-		cpr::Get(cpr::Url{ "https://public-ubiservices.ubi.com/v1/spaces/5172a557-50b5-4665-b7db-e3f2e8c5041d/sandboxes/OSBOR_PC_LNCH_A/r6karma/players?board_id=pvp_ranked&profile_ids=" + profileID + "&region_id=" + RegionToString(region) + "&season_id=" + std::to_string(Season.SeasonID) },
-			cpr::Header{ {"Authorization","Ubi_v1 t=" + this->_authHeader.ticket},
-							 {"Accept","application/json"},
-							 {"Ubi-AppId","39baebad-39e5-4552-8c25-2c9b919064e2" } },
-			cpr::VerifySsl(VERIFYSSL));
-
-
-	if (resp.error || resp.status_code != 200)
-		throw Exceptions::FatalConnectionError("Request error when retrieving user season stat. \"" + resp.error.message + "\" HTTP status code " + std::to_string(resp.status_code));
-
-
+	auto doc = _sendCPRRequest("https://public-ubiservices.ubi.com/v1/spaces/5172a557-50b5-4665-b7db-e3f2e8c5041d/sandboxes/OSBOR_PC_LNCH_A/r6karma/players?board_id=pvp_ranked&profile_ids=" + profileID + "&region_id=" + RegionToString(region) + "&season_id=" + std::to_string(Season.SeasonID));
+	
 	UserSeasonStat uss;
-	rapidjson::Document doc;
-	doc.Parse(resp.text.c_str());
-
-
-	if (doc.HasParseError())
-		throw Exceptions::JsonParseError("Error when parsing json. Raw response: " + resp.text);
 
 	auto stat = doc["players"][profileID.c_str()].GetObject();
 	
@@ -664,24 +569,10 @@ R6pp::UserGametypeStat R6pp::R6Connection::GetUserGametypeStatByID(std::string p
 	if (profileID.empty())
 		throw Exceptions::InputArgumentsInvalid("Missing profileID");
 
-	auto resp =
-		cpr::Get(cpr::Url{ "https://public-ubiservices.ubi.com/v1/spaces/5172a557-50b5-4665-b7db-e3f2e8c5041d/sandboxes/OSBOR_PC_LNCH_A/playerstats2/statistics?populations=" + profileID + "&statistics=casualpvp_timeplayed,"
-			 + "casualpvp_matchwon,casualpvp_matchlost,casualpvp_matchplayed,casualpvp_kills,casualpvp_death,rankedpvp_matchwon,rankedpvp_matchlost,rankedpvp_timeplayed,rankedpvp_matchplayed,rankedpvp_kills,rankedpvp_death" },
-			cpr::Header{ {"Authorization","Ubi_v1 t=" + this->_authHeader.ticket},
-							 {"Accept","application/json"},
-							 {"Ubi-AppId","39baebad-39e5-4552-8c25-2c9b919064e2" } },
-			cpr::VerifySsl(VERIFYSSL));
-
-	if (resp.error || resp.status_code != 200)
-		throw Exceptions::FatalConnectionError("Request error when retrieving user operator gamemode stats. \"" + resp.error.message + "\" HTTP status code " + std::to_string(resp.status_code));
-
-	R6pp::UserGametypeStat ugs;
-	rapidjson::Document doc;
-	doc.Parse(resp.text.c_str());
-
+	auto doc = _sendCPRRequest("https://public-ubiservices.ubi.com/v1/spaces/5172a557-50b5-4665-b7db-e3f2e8c5041d/sandboxes/OSBOR_PC_LNCH_A/playerstats2/statistics?populations=" + profileID + "&statistics=casualpvp_timeplayed,"
+		+ "casualpvp_matchwon,casualpvp_matchlost,casualpvp_matchplayed,casualpvp_kills,casualpvp_death,rankedpvp_matchwon,rankedpvp_matchlost,rankedpvp_timeplayed,rankedpvp_matchplayed,rankedpvp_kills,rankedpvp_death");
 	
-	if (doc.HasParseError())
-		throw Exceptions::JsonParseError("Error when parsing json. Raw response: " + resp.text);
+	R6pp::UserGametypeStat ugs;
 
 	auto stat = doc["results"][profileID.c_str()].GetObject();
 
@@ -721,25 +612,11 @@ R6pp::UserGeneralStat R6pp::R6Connection::GetUserGeneralStatByID(std::string pro
 	if (profileID.empty())
 		throw Exceptions::InputArgumentsInvalid("Missing profileID");
 
-	auto resp =
-		cpr::Get(cpr::Url{"https://public-ubiservices.ubi.com/v1/spaces/5172a557-50b5-4665-b7db-e3f2e8c5041d/sandboxes/OSBOR_PC_LNCH_A/playerstats2/statistics?populations=" + profileID
-			 +"&statistics=generalpvp_timeplayed,generalpvp_matchplayed,generalpvp_killassists,generalpvp_revive,generalpvp_headshot,generalpvp_penetrationkills,generalpvp_meleekills,"
-			+ "generalpvp_matchwon,generalpvp_matchlost,generalpvp_kills,generalpvp_death,generalpvp_bullethit,generalpvp_bulletfired"},
-			cpr::Header{ {"Authorization","Ubi_v1 t=" + this->_authHeader.ticket},
-							 {"Accept","application/json"},
-							 {"Ubi-AppId","39baebad-39e5-4552-8c25-2c9b919064e2" } },
-			cpr::VerifySsl(VERIFYSSL));
-
-	if (resp.error || resp.status_code != 200)
-		throw Exceptions::FatalConnectionError("Request error when retrieving user operator general stat. \"" + resp.error.message + "\" HTTP status code " + std::to_string(resp.status_code));
-
+	auto doc = _sendCPRRequest( "https://public-ubiservices.ubi.com/v1/spaces/5172a557-50b5-4665-b7db-e3f2e8c5041d/sandboxes/OSBOR_PC_LNCH_A/playerstats2/statistics?populations=" + profileID
+			 + "&statistics=generalpvp_timeplayed,generalpvp_matchplayed,generalpvp_killassists,generalpvp_revive,generalpvp_headshot,generalpvp_penetrationkills,generalpvp_meleekills,"
+			+ "generalpvp_matchwon,generalpvp_matchlost,generalpvp_kills,generalpvp_death,generalpvp_bullethit,generalpvp_bulletfired");
+	
 	R6pp::UserGeneralStat ugs;
-	rapidjson::Document doc;
-	doc.Parse(resp.text.c_str());
-
-
-	if (doc.HasParseError())
-		throw Exceptions::JsonParseError("Error when parsing json. Raw response: " + resp.text);
 
 	auto stat = doc["results"][profileID.c_str()].GetObject();
 
@@ -780,25 +657,11 @@ R6pp::UserGamemodeStat R6pp::R6Connection::GetUserGamemodeStatByID(std::string p
 	if (profileID.empty())
 		throw Exceptions::InputArgumentsInvalid("Missing profileID");
 
-	auto resp=
-		cpr::Get(cpr::Url{"https://public-ubiservices.ubi.com/v1/spaces/5172a557-50b5-4665-b7db-e3f2e8c5041d/sandboxes/OSBOR_PC_LNCH_A/playerstats2/statistics?populations="+profileID+
-			"&statistics=secureareapvp_matchwon,secureareapvp_matchlost,secureareapvp_matchplayed,secureareapvp_bestscore,rescuehostagepvp_matchwon,rescuehostagepvp_matchlost"+
-			",rescuehostagepvp_matchplayed,rescuehostagepvp_bestscore,plantbombpvp_matchwon,plantbombpvp_matchlost,plantbombpvp_matchplayed,plantbombpvp_bestscore"},
-			cpr::Header{ {"Authorization","Ubi_v1 t=" + this->_authHeader.ticket},
-							 {"Accept","application/json"},
-							 {"Ubi-AppId","39baebad-39e5-4552-8c25-2c9b919064e2" } },
-			cpr::VerifySsl(VERIFYSSL));
-
-	if (resp.error || resp.status_code != 200)
-		throw Exceptions::FatalConnectionError("Request error when retrieving user operator gamemode stat. \"" + resp.error.message + "\" HTTP status code " + std::to_string(resp.status_code));
+	auto doc = _sendCPRRequest("https://public-ubiservices.ubi.com/v1/spaces/5172a557-50b5-4665-b7db-e3f2e8c5041d/sandboxes/OSBOR_PC_LNCH_A/playerstats2/statistics?populations=" + profileID +
+		"&statistics=secureareapvp_matchwon,secureareapvp_matchlost,secureareapvp_matchplayed,secureareapvp_bestscore,rescuehostagepvp_matchwon,rescuehostagepvp_matchlost" +
+		",rescuehostagepvp_matchplayed,rescuehostagepvp_bestscore,plantbombpvp_matchwon,plantbombpvp_matchlost,plantbombpvp_matchplayed,plantbombpvp_bestscore");
 
 	R6pp::UserGamemodeStat ugs;
-	rapidjson::Document doc;
-	doc.Parse(resp.text.c_str());
-
-
-	if (doc.HasParseError())
-		throw Exceptions::JsonParseError("Error when parsing json. Raw response: " + resp.text);
 
 	auto stat = doc["results"][profileID.c_str()].GetObject();
 
@@ -819,12 +682,14 @@ R6pp::UserGamemodeStat R6pp::R6Connection::GetUserGamemodeStatByID(std::string p
 
 	return ugs;
 }
+
 R6pp::UserGamemodeStat R6pp::R6Connection::GetUserGamemodeStat(const SearchedUser &user) {
 	if (user.profileId.empty())
 		throw Exceptions::InputArgumentsInvalid("Missing profileID");
 
 	return this->GetUserGamemodeStatByID(user.profileId);
 }
+
 R6pp::UserGamemodeStat R6pp::R6Connection::GetUserGamemodeStat(std::string username, PlatformType platform) {
 	if (username.empty())
 		throw Exceptions::InputArgumentsInvalid("Missing username");
@@ -836,24 +701,9 @@ R6pp::UserGamemodeStat R6pp::R6Connection::GetUserGamemodeStat(std::string usern
 R6pp::PlayerProfile R6pp::R6Connection::GetPlayerProfileByID(std::string profileID) {
 	if (profileID.empty())
 		throw Exceptions::InputArgumentsInvalid("Missing profileID");
-
-	auto resp = 
-		cpr::Get(cpr::Url{"https://public-ubiservices.ubi.com/v1/spaces/5172a557-50b5-4665-b7db-e3f2e8c5041d/sandboxes/OSBOR_PC_LNCH_A/r6playerprofile/playerprofile/progressions?profile_ids=" + profileID},
-			cpr::Header{ {"Authorization","Ubi_v1 t=" + this->_authHeader.ticket},
-							 {"Accept","application/json"},
-							 {"Ubi-AppId","39baebad-39e5-4552-8c25-2c9b919064e2" } },
-			cpr::VerifySsl(VERIFYSSL));
-
-	if (resp.error || resp.status_code != 200)
-		throw Exceptions::FatalConnectionError("Request error when retrieving user operator gamemode stat. \"" + resp.error.message + "\" HTTP status code " + std::to_string(resp.status_code));
+	auto doc = _sendCPRRequest("https://public-ubiservices.ubi.com/v1/spaces/5172a557-50b5-4665-b7db-e3f2e8c5041d/sandboxes/OSBOR_PC_LNCH_A/r6playerprofile/playerprofile/progressions?profile_ids=" + profileID);
 
 	R6pp::PlayerProfile pp;
-	rapidjson::Document doc;
-	doc.Parse(resp.text.c_str());
-
-
-	if (doc.HasParseError())
-		throw Exceptions::JsonParseError("Error when parsing json. Raw response: " + resp.text);
 
 	auto stat = doc["player_profiles"].GetArray()[0].GetObject();
 
