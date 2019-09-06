@@ -206,7 +206,6 @@ R6pp::UserActions R6pp::R6Connection::GetUserActionsByID(std::string profileID) 
 		UserAction uaction;
 		uaction.activationDate = userAction["activationDate"].GetString();
 		uaction.available = userAction["available"].GetBool();
-		bool e = userAction["availableDateEnd"].IsNull();
 		uaction.availableDateEnd = !userAction["availableDateEnd"].IsNull() ? userAction["availableDateEnd"].GetString() : "";
 		uaction.availableDateStart = !userAction["availableDateStart"].IsNull() ? userAction["availableDateStart"].GetString() : "";
 		uaction.completionDate = !userAction["completionDate"].IsNull() ? userAction["completionDate"].GetString() : "";
