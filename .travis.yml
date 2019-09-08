@@ -39,16 +39,16 @@ script:
 
 after_success:
 - 'if [ ${TRAVIS_SECURE_ENV_VARS} = "true" ]; then
-        wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
-        chmod +x send.sh
+        wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh &&
+        chmod +x send.sh &&
         ./send.sh success $WEBHOOK_URL;
    fi'
 
 
 after_failure:
 - 'if [ ${TRAVIS_SECURE_ENV_VARS} = "true" ]; then
-        wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
-        chmod +x send.sh
+        wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh &&
+        chmod +x send.sh &&
         ./send.sh failure $WEBHOOK_URL;
    fi'
 
