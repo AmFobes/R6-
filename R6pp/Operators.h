@@ -26,7 +26,7 @@ namespace R6pp {
 		static	BaseOperator GSG9("1", "5", "GSG9 RECRUIT", "");
 
 		static	BaseOperator Smoke("2", "1", "SMOKE", "smoke_poisongaskill");
-		static	BaseOperator Castle("2", "2", "CASTLE", "castle_kevlarbarricaded eployed");
+		static	BaseOperator Castle("2", "2", "CASTLE", "castle_kevlarbarricadedeployed");
 		static	BaseOperator Doc("2", "3", "DOC", "doc_teammaterevive");
 		static	BaseOperator Glaz("2", "4", "GLAZ", "glaz_sniperkill");
 		static	BaseOperator Blitz("2", "5", "BLITZ", "blitz_flashedenemy");
