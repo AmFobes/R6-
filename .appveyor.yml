@@ -14,8 +14,21 @@ build_script:
     - msbuild.exe R6pp.sln
     
 on_success:
-  - ps: Invoke-RestMethod https://raw.githubusercontent.com/DiscordHooks/appveyor-discord-webhook/master/send.ps1 -o send.ps1
-  - ps: ./send.ps1 success $env:WEBHOOK_URL
+- ps: >-
+    If (test-path env:WEBHOOK_URL) {
+
+    Invoke-RestMethod https://raw.githubusercontent.com/DiscordHooks/appveyor-discord-webhook/master/send.ps1 -o send.ps1
+
+    ./send.ps1 success $env:WEBHOOK_URL
+
+    }
+  
 on_failure:
-  - ps: Invoke-RestMethod https://raw.githubusercontent.com/DiscordHooks/appveyor-discord-webhook/master/send.ps1 -o send.ps1
-  - ps: ./send.ps1 failure $env:WEBHOOK_URL
+- ps: >-
+    If (test-path env:WEBHOOK_URL) {
+
+    Invoke-RestMethod https://raw.githubusercontent.com/DiscordHooks/appveyor-discord-webhook/master/send.ps1 -o send.ps1
+
+    ./send.ps1 failure $env:WEBHOOK_URL
+
+    }
