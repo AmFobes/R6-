@@ -13,4 +13,6 @@
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?branch=dev&project=AmFobes_R6pp&metric=code_smells)](https://sonarcloud.io/dashboard?id=AmFobes_R6pp&branch=dev)
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?branch=dev&project=AmFobes_R6pp&metric=ncloc)](https://sonarcloud.io/dashboard?id=AmFobes_R6pp&branch=dev)
 
+R6++ is a Rainbow Six Siege library that fetches your account's game status.
+
 ## For information and usage go [here](https://amfobes.github.io/R6pp/)
