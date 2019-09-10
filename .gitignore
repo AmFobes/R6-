@@ -5,6 +5,7 @@
 
 ###Custom###
 out/
+R6pp/CMakeSettings.json
 
 ### C++ ###
 # Prerequisites
