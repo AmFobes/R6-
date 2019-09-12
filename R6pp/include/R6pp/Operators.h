@@ -35,15 +35,17 @@ namespace R6pp {
 		static	BaseOperator Capitao("2", "8", "CAPITAO", "capitao_lethaldartkills");
 		static	BaseOperator Hibana("2", "9", "HIBANA", "hibana_detonate_projectile");
 		static	BaseOperator Maverik("2", "10", "MAVERIK", "maverick_wallbreached");
-		static	BaseOperator Nomad("2", "11", "NOMAD", ""); // NOT IMPLEMENTED
+		static	BaseOperator Nomad("2", "11", "NOMAD", "nomad_airjabdetonate"); 
 		static	BaseOperator Mozzie("2", "12", "MOZZIE", "mozzie_droneshacked");
-		static	BaseOperator Nokk("2", "13", "NOKK", "nokk_cameras_deceived"); // NOT IMPLEMENTED
-		static	BaseOperator Warden("2", "14", "WARDEN", "warden_kills_during_ability"); // NOT IMPLEMENTED
+		static	BaseOperator Nokk("2", "13", "NOKK", "nokk_cameras_deceived"); 
+		static	BaseOperator Warden("2", "14", "WARDEN", "warden_kills_during_ability"); 
+		static  BaseOperator Goyo("2", "15", "GOYO", "goyo_volcandetonate");
+		static  BaseOperator Amaru("2", "17", "AMARU", "amaru_distancereeled");
 		static	BaseOperator Jackal("2", "A", "JACKAL", "cazador_assist_kill");
 		static	BaseOperator Ying("2", "B", "YING", "dazzler_gadget_detonate");
 		static	BaseOperator Ela("2", "C", "ELA", "concussionmine_detibate");
 		static	BaseOperator Dokkaebi("2", "D", "DOKKAEBI", "phoneshacked");
-		static	BaseOperator Maestro("2", "F", "MAESTRO", "barrage_killswithturret"); // NOT IMPLEMENTED
+		static	BaseOperator Maestro("2", "F", "MAESTRO", "barrage_killswithturret"); 
 
 		static	BaseOperator Mute("3", "1", "MUTE", "mute_gadgetjammed");
 		static	BaseOperator Ash("3", "2", "ASH", "ash_bonfirewallbreached");
@@ -55,7 +57,7 @@ namespace R6pp {
 		static	BaseOperator Caveira("3", "8", "CAVEIRA", "caveira_interrogations");
 		static	BaseOperator Echo("3", "9", "ECHO", "echo_enemy_sonicburst_affected");
 		static	BaseOperator Clash("3", "10", "CLASH", "clash_slowddown");
-		static	BaseOperator Kaid("3", "11", "KAID", ""); // NOT IMPLEMENTED
+		static	BaseOperator Kaid("3", "11", "KAID", "kaid_electroclawelectrify"); 
 		static	BaseOperator Gridlock("3", "12", "GRIDLOCK", "gridlock_traxdeployed");
 		static	BaseOperator Mira("3", "A", "MIRA", "black_mirror_gadget_deployed");
 		static	BaseOperator Lesion("3", "B", "LESION", "caltrop_enemy_affected");
@@ -98,6 +100,8 @@ namespace R6pp {
 			Mozzie,
 			Nokk,
 			Warden,
+			Goyo,
+			Amaru,
 			Jackal,
 			Ying,
 			Ela,
