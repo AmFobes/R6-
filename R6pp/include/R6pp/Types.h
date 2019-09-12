@@ -250,14 +250,14 @@ namespace R6pp {
 		inline BaseSeason() : SeasonID(0), SeasonName(""){}
 	};
 	static BaseSeason
-		Current(-1, ""), PhantomSight(14, "Phantom Sight"), BurntHorizon(13, "Burnt Horizon"),
+		Current(-1, ""), EmberRise(15,"Ember Rise"), PhantomSight(14, "Phantom Sight"), BurntHorizon(13, "Burnt Horizon"),
 		WindBastion(12, "Wind Bastion"), GrimSky(11, "Grim Sky"), ParaBellum(10, "Para Bellum"),
 		Chimera(9, "Chimera"), WhiteNoise(8, "White Noise"), BloodOrchid(7, "Blood Orchid"),
 		Health(6, "Health"), VelvetShell(5, "Velvet Shell"), RedCrow(4, "Red Crow"),
 		SkullRain(3, "Skull Rain"), DustLine(2, "Dust Line"), BlackIce(1, "Black Ice");
 
 	static std::vector<BaseSeason> Seasons{
-		Current,PhantomSight,BurntHorizon,
+		EmberRise,PhantomSight,BurntHorizon,
 		WindBastion,GrimSky,ParaBellum,
 		Chimera,WhiteNoise,BloodOrchid,
 		Health,VelvetShell,RedCrow,
