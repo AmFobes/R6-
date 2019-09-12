@@ -54,7 +54,7 @@ cmake_minimum_required (VERSION 3.4)
 project(MyProject)
 
 add_subdirectory(deps/R6pp/R6pp) # Add the R6pp Directory so cmake notices the project
-include_directories(deps/R6pp/R6pp) # Add the R6pp header directory so R6pp.h is found
+include_directories(deps/R6pp/R6pp/include) # Add the R6pp header directory so R6pp.h is found
 
 add_executable(MyExecutable "main.cpp")
 target_link_libraries(MyExecutable R6pp) # Link the R6pp library to your executable / library
