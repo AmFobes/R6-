@@ -1,4 +1,4 @@
-﻿# CMakeList.txt : CMake project for R6++, include source and define
+# CMakeList.txt : CMake project for R6++, include source and define
 # project specific logic here.
 #
 project(R6pp)
@@ -39,11 +39,12 @@ set(USE_SYSTEM_CURL ON CACHE BOOL "")
 set(USE_SYSTEM_CURL ON CACHE INTERNAL BOOL "")
 endif()
 
+if(NOT TARGET cpr)
 set(BUILD_CURL_EXE OFF CACHE BOOL "")
 set(CURL_STATICLIB ON CACHE BOOL "")
 set(BUILD_CPR_TESTS OFF CACHE BOOL "")
 add_subdirectory("dep/cpr")
-
+endif()
 set(RAPIDJSON_BUILD_EXAMPLES OFF CACHE BOOL "")
 set(RAPIDJSON_BUILD_TESTS OFF CACHE BOOL "")
 add_subdirectory("dep/rapidjson")
@@ -55,8 +56,3 @@ target_include_directories(R6pp PUBLIC "include")
 target_include_directories(R6pp PUBLIC "dep/rapidjson/include")
 
 target_link_libraries(R6pp ${CPR_LIBRARIES})
-
-
-
-
-
