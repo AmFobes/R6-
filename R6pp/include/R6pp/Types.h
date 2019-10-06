@@ -122,6 +122,7 @@ namespace R6pp {
 	};
 
 	typedef std::vector<SearchedUser> SearchedUsers;
+	
 
 	struct UserApplication {
 		std::string profileId;
@@ -174,6 +175,12 @@ namespace R6pp {
 		int roundlost;
 		int roundwon;
 		int timeplayed;
+		bool operator < (UserOperatorStat cmpOperatorStat) {
+			return this->kills < cmpOperatorStat.timeplayed;
+		}
+		bool operator > (UserOperatorStat cmpOperatorStat) {
+			return this->kills > cmpOperatorStat.timeplayed;
+		}
 	};
 
 	typedef std::vector<UserOperatorStat> UserOperatorStats;
@@ -208,6 +215,12 @@ namespace R6pp {
 		int bullethit;
 		int headshot;
 		int kills;
+		bool operator<(UserWeaponStat cmpWeaponStat) {
+			return this->kills < cmpWeaponStat.kills;
+		}
+		bool operator>(UserWeaponStat cmpWeaponStat) {
+			return this->kills > cmpWeaponStat.kills;
+		}
 	};
 
 	typedef std::vector<UserWeaponStat> UserWeaponStats;
@@ -289,6 +302,12 @@ namespace R6pp {
 		double skill_stdev;
 		std::string update_time;
 		int wins;
+		bool operator<(UserSeasonStat cmpSeasonStat) {
+			return this->rank < cmpSeasonStat.rank;
+		}
+		bool operator>(UserSeasonStat cmpSeasonStat) {
+			return this->rank > cmpSeasonStat.rank;
+		}
 	};
 	   
 	struct UserGametypeStat {
