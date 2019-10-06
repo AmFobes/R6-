@@ -122,7 +122,6 @@ namespace R6pp {
 	};
 
 	typedef std::vector<SearchedUser> SearchedUsers;
-	
 
 	struct UserApplication {
 		std::string profileId;
